@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Superseded generation renders — the shipped JPEGs live in public/img.
+# The brand master is kept, since both logo plates are derived from it.
+/assets-archive/*.png
+!/assets-archive/logo-source.png
