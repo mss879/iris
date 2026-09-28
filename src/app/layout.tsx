@@ -1,8 +1,13 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Jost } from "next/font/google";
 import MotionProvider from "@/components/MotionProvider";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import CookieConsent from "@/components/CookieConsent";
+import ScrollProgress from "@/components/anim/ScrollProgress";
 import Grain from "@/components/Grain";
 import Cursor from "@/components/Cursor";
+import { site } from "@/lib/site";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -20,26 +25,47 @@ const jost = Jost({
 });
 
 export const metadata: Metadata = {
-  title: "Iris and Me | Slow Fashion for Every Chapter",
-  description:
-    "Iris and Me makes considered women's clothing in cream and deep olive — natural fibres, small runs, and pieces made to be lived in and treasured.",
-  openGraph: {
-    title: "Iris and Me | Slow Fashion for Every Chapter",
-    description:
-      "Considered women's clothing in cream and deep olive. Natural fibres, small runs, made to be treasured.",
-    type: "website",
+  metadataBase: new URL(site.url),
+  title: {
+    default: `${site.name} | ${site.tagline}`,
+    template: `%s | ${site.name}`,
   },
+  description: site.description,
+  openGraph: {
+    siteName: site.name,
+    title: `${site.name} | ${site.tagline}`,
+    description: site.description,
+    type: "website",
+    locale: "en_AU",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#F6F1E6",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en"
+      lang="en-AU"
       className={`${cormorant.variable} ${jost.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-cream-100 text-olive-700 flex flex-col">
         <MotionProvider>
-          {children}
+          {/* First stop for keyboard users: straight past the header to the page. */}
+          <a
+            href="#main"
+            className="eyebrow sr-only z-[120] bg-olive-800 px-5 py-3.5 text-[10.5px] text-cream-50 focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+          >
+            Skip to content
+          </a>
+          <ScrollProgress />
+          <Header />
+          <main id="main" tabIndex={-1} className="flex-1 focus:outline-none">
+            {children}
+          </main>
+          <Footer />
+          <CookieConsent />
           <Grain />
           <Cursor />
         </MotionProvider>

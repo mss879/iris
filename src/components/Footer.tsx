@@ -1,124 +1,92 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { motion } from "motion/react";
 import Reveal from "./anim/Reveal";
 import Logo from "./Logo";
-import { EASE_OUT } from "@/lib/motion";
+import { footerColumns, socialLinks } from "@/lib/nav";
+import { site } from "@/lib/site";
+import { FacebookIcon, InstagramIcon } from "./icons";
 
-const columns = [
-  { title: "Shop", links: ["New In", "Dresses", "Tops", "Bottoms", "Gift Cards"] },
-  { title: "Help", links: ["Shipping", "Returns", "Size Guide", "Garment Care", "Contact"] },
-  { title: "About", links: ["Our Promise", "Our Makers", "Journal", "Stockists"] },
-];
+const socialIcon = { Instagram: InstagramIcon, Facebook: FacebookIcon } as const;
 
-const assurances = [
-  { title: "Complimentary shipping", body: "On every order over $250, Australia-wide." },
-  { title: "30 days to decide", body: "Free returns on unworn pieces, no questions." },
-  { title: "Repairs for life", body: "We mend anything we made, for as long as you own it." },
-];
-
+/**
+ * Footer, as briefed: IRISANDME, CLIENT SERVICES, DISCOVER and LEGAL, then
+ * the Instagram and Facebook links, closed by the full-width wordmark.
+ */
 export default function Footer() {
-  const [joined, setJoined] = useState(false);
+  const pathname = usePathname();
 
   return (
     <footer className="on-dark bg-olive-800 text-cream-100">
-      {/* Assurance row reads as part of the footer rather than a floating band. */}
-      <div className="border-b border-cream-100/12 px-5 py-14 md:px-10">
-        <Reveal stagger={0.1} className="mx-auto grid max-w-[1600px] grid-cols-1 gap-10 sm:grid-cols-3">
-          {assurances.map((a) => (
-            <div key={a.title} className="flex flex-col gap-2.5">
-              <p className="eyebrow text-[10px] text-olive-200">{a.title}</p>
-              <p className="max-w-[34ch] font-sans text-[13px] leading-relaxed text-cream-200/70">
-                {a.body}
-              </p>
-            </div>
-          ))}
-        </Reveal>
-      </div>
-
-      <div className="px-5 pb-10 pt-24 md:px-10">
+      <div className="px-5 pb-10 pt-20 md:px-10 md:pt-28">
         <div className="mx-auto max-w-[1600px]">
           <Reveal>
-            <h2 className="display max-w-[13ch] text-[clamp(2.4rem,8vw,6.5rem)] text-cream-50">
-              Handmade pieces for every chapter
-            </h2>
+            <div className="flex flex-col gap-6 border-b border-cream-100/15 pb-14 md:flex-row md:items-end md:justify-between">
+              <p className="display max-w-[20ch] text-[clamp(1.9rem,4.2vw,3.4rem)] leading-[0.98] text-cream-50">
+                {site.tagline}
+              </p>
+              <p className="max-w-[40ch] font-sans text-[13.5px] leading-relaxed text-cream-200/80">
+                Womenswear in linen, cotton and natural fibres, designed in Australia to be
+                worn well beyond a single season.
+              </p>
+            </div>
           </Reveal>
 
-          <div className="mt-20 grid grid-cols-1 gap-12 border-t border-cream-100/15 pt-14 lg:grid-cols-[1.4fr_repeat(3,1fr)]">
-            <Reveal>
-              <div>
-                <p className="eyebrow mb-4 text-olive-200">Join the letter</p>
-                <p className="mb-6 max-w-[36ch] font-sans text-[14px] leading-relaxed text-cream-200/80">
-                  New pieces, restocks and the occasional story from the workshop.
-                  No noise.
-                </p>
-
-                <form
-                  className="relative flex max-w-[420px] items-center gap-3 border-b border-cream-100/35 pb-3 transition-colors duration-500 focus-within:border-cream-100"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    setJoined(true);
-                  }}
-                >
-                  <label htmlFor="footer-email" className="sr-only">
-                    Email address
-                  </label>
-                  <input
-                    id="footer-email"
-                    type="email"
-                    required
-                    placeholder="Your email"
-                    className="w-full bg-transparent font-sans text-[14px] text-cream-50 placeholder:text-cream-200/50 focus:outline-none"
-                  />
-                  <button type="submit" className="eyebrow link-underline shrink-0 text-cream-50">
-                    Join
-                  </button>
-                </form>
-
-                {/* Reserve the line so confirming the sign-up never shifts the column. */}
-                <div className="mt-3 h-5">
-                  <AnimatePresence>
-                    {joined && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.6, ease: EASE_OUT }}
-                        className="font-sans text-[12px] tracking-[0.08em] text-olive-200"
-                        role="status"
-                      >
-                        Thank you — welcome to the letter.
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </div>
-            </Reveal>
-
-            {columns.map((col, i) => (
-              <Reveal key={col.title} delay={0.08 * (i + 1)}>
+          <nav aria-label="Footer" className="grid grid-cols-2 gap-x-8 gap-y-12 pt-14 md:grid-cols-4">
+            {footerColumns.map((col, i) => (
+              <Reveal key={col.title} delay={0.06 * i}>
                 <div>
-                  <p className="eyebrow mb-5 text-olive-200">{col.title}</p>
+                  <h2 className="eyebrow mb-6 text-[10.5px] text-olive-200">{col.title}</h2>
                   <ul className="flex flex-col gap-3">
                     {col.links.map((link) => (
-                      <li key={link}>
-                        <a
-                          href="#top"
+                      <li key={link.href}>
+                        <Link
+                          href={link.href}
+                          aria-current={pathname === link.href ? "page" : undefined}
                           className="link-underline font-sans text-[14px] text-cream-200/85 hover:text-cream-50"
                         >
-                          {link}
-                        </a>
+                          {link.label}
+                        </Link>
                       </li>
                     ))}
                   </ul>
                 </div>
               </Reveal>
             ))}
-          </div>
+          </nav>
 
           <Reveal>
-            <div className="mt-24 flex justify-center border-t border-cream-100/15 pt-16">
+            <div className="mt-16 flex flex-wrap items-center gap-x-8 gap-y-4 border-t border-cream-100/15 pt-10">
+              <p className="eyebrow text-[10px] text-cream-200/70">Follow {site.handle}</p>
+              <ul className="flex flex-wrap items-center gap-x-6 gap-y-3">
+                {socialLinks.map((s, i) => {
+                  const Icon = socialIcon[s.label as keyof typeof socialIcon];
+                  return (
+                    <li key={s.label} className="flex items-center gap-6">
+                      {i > 0 ? (
+                        <span aria-hidden="true" className="h-3 w-px bg-cream-100/30" />
+                      ) : null}
+                      <a
+                        href={s.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="eyebrow group/s flex items-center gap-2.5 text-[10.5px] text-cream-50"
+                      >
+                        {Icon ? <Icon className="h-4 w-4 opacity-80 transition-opacity group-hover/s:opacity-100" /> : null}
+                        <span className="link-underline">{s.label}</span>
+                        <span className="sr-only">(opens in a new tab)</span>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </Reveal>
+
+          <Reveal>
+            <div className="mt-20 flex justify-center border-t border-cream-100/15 pt-16">
               <div className="w-[min(70vw,620px)] opacity-90">
                 <Logo tone="cream" />
               </div>
@@ -132,22 +100,11 @@ export default function Footer() {
             transition={{ duration: 0.9 }}
             className="mt-16 flex flex-col gap-4 border-t border-cream-100/15 pt-8 sm:flex-row sm:items-center sm:justify-between"
           >
-            <p className="font-sans text-[12px] text-cream-200/60">
-              © {new Date().getFullYear()} Iris and Me. Made slowly.
+            <p className="font-sans text-[12px] text-cream-200/70">
+              © {new Date().getFullYear()} {site.name}. All rights reserved.
             </p>
-            <div className="flex flex-wrap gap-6">
-              {["Instagram", "Pinterest", "Privacy", "Terms"].map((l) => (
-                <a
-                  key={l}
-                  href="#top"
-                  className="eyebrow text-[10px] text-cream-200/70 hover:text-cream-50"
-                >
-                  {l}
-                </a>
-              ))}
-            </div>
-            <p className="eyebrow text-[10px] text-cream-200/60">
-              Australia — AUD $
+            <p className="eyebrow text-[10px] text-cream-200/70">
+              {site.country} — {site.currency} $
             </p>
           </motion.div>
         </div>

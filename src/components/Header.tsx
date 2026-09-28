@@ -1,289 +1,241 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion, useMotionValueEvent, useScroll, AnimatePresence } from "motion/react";
+import Link from "next/link";
+import { useCallback, useEffect, useRef, useState, type FocusEvent } from "react";
+import { usePathname } from "next/navigation";
+import { AnimatePresence, useMotionValueEvent, useScroll } from "motion/react";
+import { brandPages, mainNav, type MenuKey } from "@/lib/nav";
+import { bagCount, store, useStore } from "@/lib/store";
 import Announcement from "./Announcement";
 import Logo from "./Logo";
-import { EASE_OUT } from "@/lib/motion";
-import { products } from "@/lib/products";
+import { lockScroll } from "./SmoothScroll";
+import MegaMenu from "./header/MegaMenu";
+import MobileMenu from "./header/MobileMenu";
+import SearchOverlay from "./header/SearchOverlay";
+import BagDrawer from "./header/BagDrawer";
+import { BagIcon, ChevronIcon, HeartIcon, SearchIcon, UserIcon } from "./icons";
 
-const nav = [
-  { label: "Shop All", href: "#shop" },
-  { label: "New In", href: "#shop" },
-  { label: "Dresses", href: "#shop" },
-  { label: "Our Story", href: "#promise" },
-  { label: "Journal", href: "#journal" },
-];
+type Panel = "menu" | "search";
 
-type Panel = "menu" | "search" | "bag" | null;
+/** Which main-menu item the current page belongs under. */
+function isActive(href: string, pathname: string) {
+  switch (href) {
+    case "/shop/new-arrivals":
+      return pathname === href;
+    case "/shop":
+      return (
+        pathname !== "/shop/new-arrivals" &&
+        (pathname === "/shop" || pathname.startsWith("/shop/") || pathname.startsWith("/products/"))
+      );
+    case "/our-story":
+      return brandPages.some((p) => p.href !== "/journal" && p.href === pathname);
+    default:
+      return pathname === href || pathname.startsWith(`${href}/`);
+  }
+}
 
+/**
+ * Fixed site header. Transparent over the homepage hero until the page moves,
+ * solid everywhere else. SHOP, COLLECTIONS and OUR STORY open a dropdown on
+ * hover, or from the chevron beside them for keyboard users.
+ *
+ * Open states are stored with the path they were opened on, so navigating
+ * anywhere closes them without an effect having to reset anything.
+ */
 export default function Header() {
+  const pathname = usePathname();
+  const overlay = pathname === "/";
   const { scrollY } = useScroll();
-  const [solid, setSolid] = useState(false);
-  const [panel, setPanel] = useState<Panel>(null);
-  const [query, setQuery] = useState("");
+  const [scrolled, setScrolled] = useState(false);
+  useMotionValueEvent(scrollY, "change", (y) => setScrolled(y > 80));
 
-  // The bar stays put in both directions — it only swaps from transparent to
-  // its solid ground once the hero is behind it.
-  useMotionValueEvent(scrollY, "change", (latest) => setSolid(latest > 80));
+  const [mega, setMega] = useState<{ key: MenuKey; path: string } | null>(null);
+  const [panel, setPanel] = useState<{ key: Panel; path: string } | null>(null);
+  const openMega = mega?.path === pathname ? mega.key : null;
+  const openPanel = panel?.path === pathname ? panel.key : null;
 
-  // An open panel owns the page: lock the scroll behind it and let Escape close.
+  const state = useStore();
+  const count = bagCount(state);
+  const saved = state.wishlist.length;
+  const bagOpen = state.bagOpen;
+
+  const solid = !overlay || scrolled || openMega !== null;
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const megaRef = useRef<HTMLDivElement>(null);
+
+  const closePanel = useCallback(() => setPanel(null), []);
+  const closeBag = useCallback(() => store.setBagOpen(false), []);
+  const closeMega = useCallback(() => setMega(null), []);
+
+  // An overlay owns the page: pause the scroll behind it.
+  const overlayOpen = openPanel !== null || bagOpen;
   useEffect(() => {
-    if (!panel) return;
-    document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setPanel(null);
-    window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = "";
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [panel]);
+    if (!overlayOpen) return;
+    lockScroll(true);
+    return () => lockScroll(false);
+  }, [overlayOpen]);
 
-  const results = query.trim()
-    ? products.filter((p) =>
-        `${p.name} ${p.colour} ${p.fabric}`.toLowerCase().includes(query.toLowerCase())
-      )
-    : [];
+  // The dropdown closes on Escape and hands focus back to its chevron.
+  useEffect(() => {
+    if (!openMega) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setMega(null);
+      document.getElementById(`mega-toggle-${openMega}`)?.focus();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [openMega]);
+
+  const openFromKeyboard = (key: MenuKey) => {
+    if (openMega === key) return setMega(null);
+    setMega({ key, path: pathname });
+    window.setTimeout(() => megaRef.current?.querySelector<HTMLElement>("a")?.focus(), 80);
+  };
+
+  // Tabbing out of the header entirely closes the dropdown.
+  const onBlur = (e: FocusEvent) => {
+    if (!wrapRef.current?.contains(e.relatedTarget as Node)) setMega(null);
+  };
+
+  const ink = solid ? "text-olive-800" : "text-cream-50";
 
   return (
     <>
-      <header
-        className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
-          solid
-            ? "bg-cream-100/92 backdrop-blur-md text-olive-700 border-b hairline"
-            : "bg-transparent text-cream-50"
-        }`}
+      <div
+        ref={wrapRef}
+        onMouseLeave={() => setMega(null)}
+        onBlur={onBlur}
+        className="fixed inset-x-0 top-0 z-50"
       >
-        <Announcement />
+        <header
+          className={`relative transition-colors duration-500 ${
+            solid ? "border-b hairline bg-cream-100/95 backdrop-blur-md" : "bg-transparent"
+          } ${ink}`}
+        >
+          <Announcement />
 
-        <div className="mx-auto flex h-[76px] max-w-[1600px] items-center justify-between px-5 md:px-10">
-          <nav className="hidden items-center gap-7 lg:flex">
-            {nav.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="eyebrow link-underline opacity-90 hover:opacity-100"
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
+          <div className="relative mx-auto flex h-[76px] max-w-[1600px] items-center justify-between px-5 md:px-10">
+            <nav aria-label="Main" className="hidden xl:block">
+              <ul className="flex items-center gap-5 2xl:gap-8">
+                {mainNav.map((item) => {
+                  const key = "menu" in item ? item.menu : null;
+                  const active = isActive(item.href, pathname);
+                  return (
+                    <li
+                      key={item.label}
+                      className="flex items-center"
+                      onMouseEnter={() => (key ? setMega({ key, path: pathname }) : setMega(null))}
+                    >
+                      <Link
+                        href={item.href}
+                        aria-current={active ? "page" : undefined}
+                        className="eyebrow link-underline py-3"
+                      >
+                        {item.label}
+                      </Link>
+                      {key ? (
+                        <button
+                          type="button"
+                          id={`mega-toggle-${key}`}
+                          onClick={() => openFromKeyboard(key)}
+                          aria-expanded={openMega === key}
+                          // Only reference the panel while it exists in the DOM.
+                          aria-controls={openMega === key ? `mega-${key}` : undefined}
+                          aria-label={`${item.label} menu`}
+                          className="grid h-6 w-6 place-items-center opacity-60 transition-opacity hover:opacity-100"
+                        >
+                          <span
+                            className={`transition-transform duration-500 ${openMega === key ? "rotate-180" : ""}`}
+                          >
+                            <ChevronIcon className="h-2 w-2" />
+                          </span>
+                        </button>
+                      ) : null}
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
 
-          <button
-            onClick={() => setPanel("menu")}
-            className="eyebrow flex items-center gap-2.5 lg:hidden"
-            aria-label="Open menu"
-          >
-            <span className="flex w-4 flex-col gap-[3px]">
-              <span className="block h-px w-full bg-current" />
-              <span className="block h-px w-full bg-current" />
-            </span>
-            Menu
-          </button>
-
-          {/*
-            Both plates are always mounted and crossfaded. Swapping the `src`
-            on scroll would flash while the second file decoded.
-          */}
-          <a
-            href="#top"
-            aria-label="Iris and Me — home"
-            className="absolute left-1/2 w-[124px] -translate-x-1/2 md:w-[152px]"
-          >
-            <span className="relative block">
-              <Logo tone="olive" priority className={`transition-opacity duration-500 ${solid ? "opacity-100" : "opacity-0"}`} />
-              <span className="absolute inset-0">
-                <Logo tone="cream" priority className={`transition-opacity duration-500 ${solid ? "opacity-0" : "opacity-100"}`} />
+            <button
+              type="button"
+              onClick={() => setPanel({ key: "menu", path: pathname })}
+              className="eyebrow flex items-center gap-2.5 xl:hidden"
+              aria-label="Open menu"
+              aria-haspopup="dialog"
+            >
+              <span className="flex w-4 flex-col gap-[3px]" aria-hidden="true">
+                <span className="block h-px w-full bg-current" />
+                <span className="block h-px w-full bg-current" />
               </span>
-            </span>
-          </a>
-
-          <div className="flex items-center gap-5">
-            <button onClick={() => setPanel("search")} className="eyebrow link-underline hidden sm:block">
-              Search
+              Menu
             </button>
-            <button className="eyebrow link-underline hidden sm:block">Account</button>
-            <button onClick={() => setPanel("bag")} className="eyebrow link-underline">
-              Bag (0)
-            </button>
-          </div>
-        </div>
-      </header>
 
-      <AnimatePresence>
-        {panel === "menu" && (
-          <motion.div
-            key="menu"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.35 }}
-            className="on-dark fixed inset-0 z-[70] bg-olive-800 text-cream-100"
-          >
-            <div className="flex h-[76px] items-center justify-between px-5">
-              <span className="w-[140px]"><Logo tone="cream" /></span>
-              <button onClick={() => setPanel(null)} className="eyebrow" aria-label="Close menu">
-                Close
+            {/*
+              Both plates are always mounted and crossfaded. Swapping the `src`
+              on scroll would flash while the second file decoded.
+            */}
+            <Link
+              href="/"
+              aria-label="IrisandMe — home"
+              className="absolute left-1/2 w-[112px] -translate-x-1/2 md:w-[148px]"
+            >
+              <span className="relative block">
+                <Logo tone="olive" priority className={`transition-opacity duration-500 ${solid ? "opacity-100" : "opacity-0"}`} />
+                <span className="absolute inset-0">
+                  <Logo tone="cream" priority className={`transition-opacity duration-500 ${solid ? "opacity-0" : "opacity-100"}`} />
+                </span>
+              </span>
+            </Link>
+
+            <div className="flex items-center gap-4 md:gap-5">
+              <button
+                type="button"
+                onClick={() => setPanel({ key: "search", path: pathname })}
+                className="eyebrow flex items-center gap-2"
+                aria-label="Search"
+                aria-haspopup="dialog"
+              >
+                <SearchIcon className="h-[15px] w-[15px]" />
+                <span className="link-underline hidden xl:inline-block">Search</span>
+              </button>
+              <Link href="/account" className="eyebrow hidden items-center gap-2 sm:flex" aria-label="My account">
+                <UserIcon className="h-[15px] w-[15px]" />
+                <span className="link-underline hidden xl:inline-block">Account</span>
+              </Link>
+              <Link
+                href="/wishlist"
+                className="eyebrow hidden items-center gap-1.5 sm:flex"
+                aria-label={`Wishlist, ${saved} saved`}
+              >
+                <HeartIcon className="h-[15px] w-[15px]" filled={saved > 0} />
+                {saved > 0 ? <span className="text-[9.5px]">{saved}</span> : null}
+              </Link>
+              <button
+                type="button"
+                onClick={() => store.setBagOpen(true)}
+                className="eyebrow flex items-center gap-2"
+                aria-label={`Bag, ${count} ${count === 1 ? "item" : "items"}`}
+                aria-haspopup="dialog"
+              >
+                <BagIcon className="h-[15px] w-[15px]" />
+                <span className="hidden sm:inline">Bag</span>
+                <span className="text-[9.5px]">({count})</span>
               </button>
             </div>
-            <nav className="flex flex-col px-5 pt-8">
-              {nav.map((item, i) => (
-                <motion.a
-                  key={item.label}
-                  href={item.href}
-                  onClick={() => setPanel(null)}
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.07 * i + 0.1, duration: 0.6, ease: EASE_OUT }}
-                  className="display flex items-baseline justify-between border-b border-cream-100/15 py-5 text-[32px]"
-                >
-                  {item.label}
-                  <span className="eyebrow text-[10px] text-cream-100/40">
-                    0{i + 1}
-                  </span>
-                </motion.a>
-              ))}
-            </nav>
-            <div className="absolute inset-x-5 bottom-8 flex gap-6">
-              {["Instagram", "Pinterest", "Contact"].map((l) => (
-                <a key={l} href="#top" className="eyebrow text-[10px] text-cream-200/70">
-                  {l}
-                </a>
-              ))}
-            </div>
-          </motion.div>
-        )}
+          </div>
 
-        {panel === "search" && (
-          <motion.div
-            key="search"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[70] bg-cream-100"
-          >
-            <div className="mx-auto max-w-[900px] px-6 pt-16">
-              <div className="flex items-center justify-between">
-                <p className="eyebrow text-olive-400">Search</p>
-                <button onClick={() => setPanel(null)} className="eyebrow text-olive-600" aria-label="Close search">
-                  Close
-                </button>
-              </div>
+          <AnimatePresence>
+            {openMega ? <MegaMenu key={openMega} ref={megaRef} menu={openMega} onNavigate={closeMega} /> : null}
+          </AnimatePresence>
+        </header>
+      </div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.08 }}
-              >
-                <label htmlFor="site-search" className="sr-only">Search products</label>
-                <input
-                  id="site-search"
-                  autoFocus
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Linen, olive, the Lena Maxi…"
-                  className="mt-8 w-full border-b border-olive-700/25 bg-transparent pb-5 font-display text-[clamp(1.6rem,4vw,2.6rem)] font-light text-olive-800 placeholder:text-olive-700/25 focus:border-olive-700 focus:outline-none"
-                />
-              </motion.div>
-
-              <div className="mt-10">
-                {query.trim() === "" ? (
-                  <>
-                    <p className="eyebrow mb-5 text-olive-400">Popular right now</p>
-                    <div className="flex flex-wrap gap-3">
-                      {["Linen", "Deep Olive", "Dresses", "The Olive Edit", "Silk"].map((s) => (
-                        <button
-                          key={s}
-                          onClick={() => setQuery(s)}
-                          className="eyebrow border hairline px-4 py-2.5 text-[10px] text-olive-600 transition-colors duration-500 hover:bg-olive-800 hover:text-cream-50"
-                        >
-                          {s}
-                        </button>
-                      ))}
-                    </div>
-                  </>
-                ) : results.length === 0 ? (
-                  <p className="font-sans text-[14px] text-olive-400">
-                    Nothing matches “{query}” — try linen, olive or dresses.
-                  </p>
-                ) : (
-                  <ul className="divide-y divide-olive-700/10">
-                    {results.map((p) => (
-                      <li key={p.slug}>
-                        <a href="#shop" onClick={() => setPanel(null)} className="flex items-center justify-between gap-5 py-4">
-                          <span className="font-sans text-[13px] uppercase tracking-[0.15em] text-olive-800">
-                            {p.name}
-                          </span>
-                          <span className="font-sans text-[13px] text-olive-500">${p.price}</span>
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            </div>
-          </motion.div>
-        )}
-
-        {panel === "bag" && (
-          <motion.aside
-            key="bag"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[70]"
-            aria-label="Shopping bag"
-          >
-            <button
-              onClick={() => setPanel(null)}
-              aria-label="Close bag"
-              className="absolute inset-0 bg-olive-950/45 backdrop-blur-[2px]"
-            />
-            <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ duration: 0.7, ease: EASE_OUT }}
-              className="absolute right-0 top-0 flex h-full w-full max-w-[440px] flex-col bg-cream-100"
-            >
-              <div className="flex items-center justify-between border-b hairline px-7 py-6">
-                <p className="eyebrow text-olive-600">Your bag (0)</p>
-                <button onClick={() => setPanel(null)} className="eyebrow text-olive-400" aria-label="Close bag">
-                  Close
-                </button>
-              </div>
-
-              <div className="flex flex-1 flex-col items-center justify-center px-7 text-center">
-                <p className="serif text-[1.7rem] leading-snug text-olive-700">
-                  Your bag is empty
-                </p>
-                <p className="mt-4 max-w-[30ch] font-sans text-[13px] leading-relaxed text-olive-400">
-                  Complimentary shipping on orders over $250, and 30 days to
-                  change your mind.
-                </p>
-                <button onClick={() => setPanel(null)} className="btn btn-dark mt-9 px-10 py-3.5">
-                  <span className="eyebrow text-[10px]">Start shopping</span>
-                </button>
-              </div>
-
-              <div className="border-t hairline px-7 py-6">
-                <p className="eyebrow mb-4 text-olive-400">You might like</p>
-                <ul className="flex flex-col gap-3">
-                  {products.slice(0, 3).map((p) => (
-                    <li key={p.slug} className="flex items-center justify-between gap-4">
-                      <span className="font-sans text-[12px] uppercase tracking-[0.14em] text-olive-700">
-                        {p.name}
-                      </span>
-                      <span className="font-sans text-[12px] text-olive-500">${p.price}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </motion.div>
-          </motion.aside>
-        )}
+      <AnimatePresence>
+        {openPanel === "menu" ? <MobileMenu key="menu" onClose={closePanel} /> : null}
+        {openPanel === "search" ? <SearchOverlay key="search" onClose={closePanel} /> : null}
+        {bagOpen ? <BagDrawer key="bag" onClose={closeBag} /> : null}
       </AnimatePresence>
     </>
   );

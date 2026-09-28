@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, useScroll, useTransform, useSpring } from "motion/react";
 import SplitWords from "./anim/SplitWords";
 import { EASE_OUT, DUR, SCROLL_SPRING } from "@/lib/motion";
@@ -18,7 +19,9 @@ export default function Editorial({
   title,
   body,
   cta = "Read More",
+  href,
   align = "left",
+  position = "center",
 }: {
   image: string;
   alt: string;
@@ -27,7 +30,10 @@ export default function Editorial({
   title: string;
   body?: string;
   cta?: string;
+  href: string;
   align?: "left" | "center" | "right";
+  /** Focal point, so the subject stays in frame on narrow screens. */
+  position?: string;
 }) {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -60,7 +66,7 @@ export default function Editorial({
       className="on-dark relative flex h-[92vh] min-h-[600px] w-full items-center overflow-hidden bg-olive-900"
     >
       <motion.div style={{ y, scale }} className="absolute inset-0 will-change-transform">
-        <Image src={image} alt={alt} fill sizes="100vw" className="object-cover object-center" />
+        <Image src={image} alt={alt} fill sizes="100vw" className="object-cover" style={{ objectPosition: position }} />
       </motion.div>
 
       <div className="absolute inset-0 bg-olive-950/22" />
@@ -111,9 +117,9 @@ export default function Editorial({
             viewport={{ once: true, amount: 0.5 }}
             transition={{ delay: 0.42, duration: DUR.base, ease: EASE_OUT }}
           >
-            <a href="#journal" className="btn btn-light mt-10 px-11">
+            <Link href={href} className="btn btn-light mt-10 px-11">
               <span className="eyebrow">{cta}</span>
-            </a>
+            </Link>
           </motion.div>
         </div>
       </div>

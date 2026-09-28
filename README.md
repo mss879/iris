@@ -1,9 +1,12 @@
-# Iris and Me
+# IrisandMe
 
-Homepage for **Iris and Me**, a women's slow-fashion label — rebuilt from the
-structure of daughtersofindia.net in a cream and dark-olive palette.
+The IrisandMe website — a women's label working in linen, cotton and natural
+fibres. The site follows the client's structure document ("IrisandMe website
+structure") page for page: an editorial homepage, the shop, the collections,
+the IrisandMe brand world, client services, discover pages, the customer area
+and the legal pages.
 
-Next.js 16.3.2 · React 19.2.8 · Tailwind CSS 4.3.3 · Motion 13 · Lenis
+Next.js 16.3 · React 19.2 · Tailwind CSS 4 · Motion 13 · Lenis
 
 ## Run
 
@@ -11,129 +14,174 @@ Next.js 16.3.2 · React 19.2.8 · Tailwind CSS 4.3.3 · Motion 13 · Lenis
 npm run dev
 ```
 
-## Brand mark
+## Site map
 
-`public/img/logo-olive.png` and `logo-cream.png` are the two plates of the
-wordmark. Both are derived from the supplied artwork in `assets-archive/logo-source.png`,
-which was dark ink on a white ground: luminance is inverted into an alpha mask
-(so the anti-aliased edges survive), the mark is re-tinted along a horizontal
-gradient in the brand palette, then trimmed tight.
+Numbers follow the client's brief.
 
-| Plate | Gradient | Use |
+| # | Page | Route |
 | --- | --- | --- |
-| `logo-olive` | `olive-800` → `olive-400` | Cream grounds — curtain, solid header |
-| `logo-cream` | `cream-50` → `cream-300` | Olive grounds — transparent header, menu, footer |
+| 1 | Home | `/` |
+| 2 | Shop (landing) | `/shop` |
+| | New Arrivals · Shop All · Dresses · Tops & Shirts · Skirts · Trousers & Shorts · Sets / Co-ords · Essentials | `/shop/[category]` |
+| | Sale — built but switched off ("to be added later") | `enabled: false` in `src/lib/products.ts` |
+| | Product pages | `/products/[slug]` |
+| 3 | Collections — The Linen Edit, We Love Cotton, The Resort Collection, The Lotus Collection, Limited Editions | `/collections`, `/collections/[slug]` |
+| 4 | Our Story | `/our-story` |
+| 5 | Our Philosophy | `/our-philosophy` |
+| 6 | Craftsmanship | `/craftsmanship` |
+| 7 | Our Fabrics | `/our-fabrics` |
+| 8 | Our Prints | `/our-prints` |
+| 9 | Consciously IrisandMe | `/consciously-irisandme` |
+| 10 | People & Purpose | `/people-and-purpose` |
+| 11 | The Journal — The Art of Linen, How to Style Linen, Seasonal Trends | `/journal`, `/journal/[slug]` |
+| 12 | Size & Fit | `/size-and-fit` |
+| 13 | Garment Care | `/garment-care` |
+| 14 | Shipping & Delivery | `/shipping-and-delivery` |
+| 15 | Returns & Exchanges | `/returns-and-exchanges` |
+| 16 | FAQ | `/faq` |
+| 17 | Customer Services (Contact) | `/contact` |
+| 18 | Stockists | `/stockists` |
+| 20 | Press | `/press` |
+| 21 | Lookbook | `/lookbook` |
+| 22 | Gift Cards | `/gift-cards` |
+| 23 | My Account — Orders, Addresses, Returns, Wishlist, Account details | `/account` |
+| 24 | Wishlist | `/wishlist` |
+| 25 | Order Tracking | `/track-order` |
+| 26–30 | Privacy Policy · Terms & Conditions · Shipping Policy · Returns & Refund Policy · Cookie Policy | `/privacy-policy`, `/terms-and-conditions`, `/shipping-policy`, `/returns-policy`, `/cookie-policy` |
+| 31 | Accessibility | `/accessibility` |
 
-Both are always mounted in the header and crossfaded, because swapping `src`
-on scroll flashes while the second file decodes.
+The main menu is exactly **NEW IN | SHOP | COLLECTIONS | OUR STORY | JOURNAL**
+(SHOP, COLLECTIONS and OUR STORY open dropdowns), and the footer carries the
+four briefed columns — IRISANDME, CLIENT SERVICES, DISCOVER, LEGAL — followed
+by Instagram and Facebook. Client Services and Track My Order sit in the
+utility strip above the header on every page, so order tracking can be found
+immediately.
 
-## Palette
+## Where content lives
 
-Defined as Tailwind tokens in `src/app/globals.css` (`@theme`).
+Everything the pages repeat is defined once:
 
-| Token | Hex | Use |
-| --- | --- | --- |
-| `cream-50` | `#FBF8F1` | Type on olive |
-| `cream-100` | `#F6F1E6` | Page background |
-| `cream-200` | `#EFE8D9` | Alternating band |
-| `olive-700` | `#363E28` | Primary text, announcement |
-| `olive-800` | `#2C331F` | Footer, editorial ground |
-| `olive-950` | `#191D12` | Image veils |
-
-Type: **Cormorant Garamond** (display, uppercase; `.serif` for mixed-case pull
-quotes) + **Jost** (UI/body).
-
-Shared recipes live in `@layer components`: `.btn` (with `.btn-dark` /
-`.btn-light` grounds) is the single button, so every call to action wipes up
-from the bottom edge with the same weight; `.section-index` is the numeral +
-rule + label that opens each section; `--rule` is the one hairline token.
-
-## Scroll animation system
-
-`src/components/anim/` holds the reusable primitives:
-
-| Component | Behaviour |
+| File | Holds |
 | --- | --- |
-| `Reveal` / `RevealItem` | Fade + slide on entry, `once: true`, optional stagger |
-| `SplitWords` | Headings rise word-by-word out of an overflow mask |
-| `ImageReveal` | Clip-path wipe over a photograph settling out of over-scale |
-| `Parallax` | Spring-damped counter-scroll drift |
-| `VelocityMarquee` | Infinite marquee that surges with scroll velocity and flips direction |
-| `Counter` | Counts up when scrolled into view |
-| `ScrollProgress` | Hairline progress bar |
+| `src/lib/site.ts` | Contact emails, hours, response time, social links, shipping regions and rates, returns window, gift card rules, payment methods |
+| `src/lib/sizing.ts` | Size conversions (AU/UK/US/EU), body measurements, fit descriptions, model measurements, garment measurements |
+| `src/lib/products.ts` | Shop categories, collections, signature prints and every product |
+| `src/lib/journal.ts` | Journal articles, written as typed content blocks |
+| `src/lib/nav.ts` | Main menu, footer columns and the page families |
+| `src/app/lookbook/_data/looks.ts` | Lookbook chapters and the pieces worn in each look |
+| `src/app/stockists/_data/stockists.ts` | Boutique stockists — empty until the first boutique joins; the page lists them by region once added |
+| `src/app/press/_data/press.ts` | As Seen In, press features, editorial shoots and placements — each section appears once it has an entry |
+| `src/app/people-and-purpose/_components/initiatives.ts` | Women's empowerment and children's initiatives — empty until programs are established |
+| `src/app/faq/_components/faqs.ts` | FAQ answers, used for both the page and its structured data |
 
-All timing and easing comes from `src/lib/motion.ts` — an expo-out curve
-(`0.16, 1, 0.3, 1`) and one shared scroll spring, so the whole page settles
-with the same weight.
+Change a value in `site.ts` and every page that quotes it — service pages,
+policies, product pages, the bag — updates together.
 
-Section-level scroll choreography:
+### Awaiting client confirmation
 
-- **Curtain** — a cream panel holds the brand mark, then lifts to hand the page
-  to the hero. Zero-length for reduced-motion users; hidden entirely without JS.
-- **Hero** — a single full-bleed cinematic frame that scales and drifts on a
-  scroll spring while the copy sits in the negative space and sinks away.
-- **AsSeenOnYou** — pinned panel converting vertical scroll into horizontal
-  travel, with each card reading its **own** screen position every frame and
-  driving its own transforms from it: rotating toward the viewer as it reaches
-  the middle and away again on the far side, scaling and dimming with distance,
-  while the photograph inside counter-drifts against its frame. Because the
-  effect is position-derived rather than index-derived, it holds for any card
-  count or viewport. Track travel is measured (not guessed in `vw`) so the last
-  card lands flush against the gutter, and the section's height is derived from
-  that travel so the pin never outlasts the movement.
-- **Editorial** — pinned background scaled and drifted behind settling copy.
-- **Header** — always pinned; crossfades from transparent to a solid blurred
-  ground past 80px. Search and bag open full overlays that lock the scroll
-  behind them and close on Escape.
+The structure document describes what each page should cover but not the
+operational facts, so these are sensible working defaults to confirm before
+launch:
 
-Two page-wide layers sit above everything: `Grain`, a fixed fractal-noise
-overlay at ~5% that gives the flat cream fields a paper tooth, and `Cursor`, a
-trailing ring that opens over links and becomes a labelled disc over product
-imagery. The cursor reads pointer capability through `useSyncExternalStore`
-(server snapshot `false`), so it never reaches touch devices, and it hides the
-native cursor from JS rather than CSS — if it fails to mount, the page is still
-left with a usable pointer.
+- Contact emails (`care@`, `press@`, `stockists@`, `privacy@irisandme.com`),
+  business hours and the one-business-day response time.
+- Shipping carriers, rates, delivery estimates and free-shipping thresholds per
+  region; processing time.
+- Returns window (30 days), faulty-item reporting window (7 days), the $10
+  domestic return-label deduction, refund timing.
+- Gift card amounts ($50–$1,000) and validity (3 years).
+- Payment methods, including Afterpay.
+- Size chart values and model measurements.
+- Instagram and Facebook handles (`@irisandme`) and the domain.
+- Brand story specifics (founding, people, workshops) — the copy describes the
+  brand's approach without inventing facts, so real details can be added. The
+  making process (sampling, fabric selection, construction, finishing,
+  printing methods, the quality checklist) is written as the house's practice
+  and should be checked against how IrisandMe actually works.
+- Consciously IrisandMe and People & Purpose state intentions and future
+  commitments, never achievements; confirm each commitment is one the
+  business is willing to make publicly.
+- Care guidance against the real care labels, and the fabric compositions of
+  each product.
+- The press boilerplate and the press office offer (imagery, samples,
+  interviews on request).
+- The legal pages are thorough drafts written for an Australian business
+  selling internationally. They need review by the client's lawyer, and the
+  legal entity details (name, ABN, address, governing state) added. Tax
+  treatment of international orders (GST, UK VAT, EU import VAT) needs an
+  accountant's confirmation.
 
-Lenis provides weighted smooth scrolling; `MotionProvider` sets
-`reducedMotion="user"`, and Lenis is skipped entirely, when the OS asks for
-reduced motion.
+## Commerce
+
+The bag, wishlist, account area, gift cards and order tracking are fully
+interactive on the front end but not yet connected to a store platform:
+
+- **Bag and wishlist** persist in `localStorage` (`irisandme:store:v1`) and are
+  shared by every component through one external store (`src/lib/store.ts`).
+  Checkout shows a note until the payment platform is connected.
+- **My Account** signs in for the session only; nothing is sent anywhere.
+- **Forms** (contact, newsletter, stockist enquiry, gift cards) validate and
+  confirm on the page; they need wiring to an email or CRM service.
+- **Order tracking** answers honestly that no order was found until it can
+  query real orders.
+
+## Accessibility
+
+Built in from the start, as the brief asks: a skip link, landmarks and one
+`h1` per page; every menu, dropdown, drawer, tab set and accordion works by
+keyboard (Escape closes overlays and returns focus); overlays trap focus;
+colour tokens meet WCAG AA on every cream ground (`olive-400` was deepened for
+this); labelled fields with announced errors; the announcement strip can be
+paused; motion and smooth scrolling stand down for `prefers-reduced-motion`;
+nothing scrolls sideways at 320px. Every route passes an axe-core audit
+against WCAG 2.2 AA.
+
+A cookie consent banner (essential only / accept all) stores its choice in
+`localStorage` and can be reopened from the Cookie Policy.
+
+## Design system
+
+Tokens live in `src/app/globals.css` (`@theme`): cream grounds, deep olive
+type, Cormorant Garamond for display (`.display`, uppercase; `.serif` for
+mixed-case quotes) and Jost for body. Shared recipes: `.btn` (`-dark`,
+`-light`, `-solid`), `.section-index`, `.prose-iris` for long-form text, and
+`.field-*` for forms.
+
+Pages are composed from `src/components/ui/`:
+
+| Component | Use |
+| --- | --- |
+| `PageHero` | Opening band — `plain`, `split` (type + portrait) or `image` (full bleed) |
+| `Section`, `SectionHeading` | Bands on one spacing rhythm; numeral, rule, label and a word-by-word heading |
+| `SplitFeature`, `FeatureGrid`, `Figure`, `PullQuote`, `CtaBand` | Editorial building blocks |
+| `ServiceShell` | Client Services pages: hero plus a sticky index of every service page |
+| `LegalShell` | Policies: contents list, numbered sections, other policies |
+| `Accordion`, `Tabs`, `DataTable` | Accessible disclosure, tabs and reference tables |
+| `Form` | Text, select, textarea and checkbox fields with labels, hints and errors |
+| `NewsletterSignup`, `EmptyState`, `ContinueExploring`, `ButtonLink` | Shared pieces |
+
+`src/components/brand/` holds the pieces shared by the IrisandMe brand pages
+(standfirsts, page indexes, checklists, print index) and
+`src/components/services/` those shared by the Client Services pages.
+
+Motion primitives are in `src/components/anim/` (`Reveal`, `SplitWords`,
+`Parallax`, `ScrollProgress`), all timed from `src/lib/motion.ts`. Photographs
+reveal by scaling a cover panel away rather than with `clip-path`, which could
+fail silently and leave images hidden.
 
 ## Imagery
 
-All 21 photographs in `public/img/` were generated with the Higgsfield CLI
-against a shared cream/dark-olive art direction so the set reads as one
-campaign. Budget was spent where it shows:
+All photographs in `public/img/` are generated placeholders in one cream and
+deep-olive art direction, ready to be swapped for the client's own shoots. The
+close-ups of linen, stitching, buttons, prints and garment details the brief
+asks for on Craftsmanship are in `craft-*.jpg`; fabrics in `fabric-*.jpg`;
+prints in `print-*.jpg`; collection campaigns in `col-*.jpg`; product studio
+and lifestyle frames in `p-*.jpg` and `l-*.jpg`.
 
-- **Feature images** (hero, both editorial plates, the promise portrait) —
-  `seedream_v5_pro` / `nano_banana_pro` at 2K, 2–3 credits each.
-- **Grid images** (products, UGC, journal) — `z_image` at 0.15 credits each.
+## Brand mark
 
-Total: **~18 credits**. Sources are JPEG (quality 84) — 16 MB rather than the
-101 MB the original PNGs occupied. Superseded shots are kept in `assets-archive/`, outside `public/`, so they are
-neither served nor built — and git-ignored, so they never reach the repo. The
-brand master (`logo-source.png`) is the one file there that is tracked.
-
-## Sections
-
-| Section | Notes |
-| --- | --- |
-| Hero | Full-bleed cinematic frame on a scroll spring |
-| Intro | Statement + three-up commitments |
-| PressStrip | Masthead row set in the display serif |
-| ShopCollection (02) | Filterable grid; an editorial panel spans the remainder of an incomplete row so it always closes flush |
-| Editorial (03, 04) | Pinned plate behind settling copy |
-| AsSeenOnYou | Position-aware 3D gallery |
-| BrandPromise (05) | Parallax portrait + counted pledges |
-| Testimonials (06) | Auto-advancing quotes, paused on hover |
-| Journal (07) | One feature story + a reading list |
-| Moments | Community grid |
-| Footer | Assurances, letter sign-up, full-width wordmark |
-
-Product cards carry a second lifestyle frame that crossfades on hover, a badge,
-fabric, colour swatches, rating, a wishlist toggle and size quick-add with
-sold-out sizes struck through rather than hidden.
-
-## Notes
-
-Content is presentational — products live in `src/lib/products.ts`, and cart,
-search, wishlist and account controls are UI-only.
+`public/img/logo-olive.png` and `logo-cream.png` are the two plates of the
+wordmark, derived from `assets-archive/logo-source.png`. Both are always
+mounted in the header and crossfaded, because swapping `src` on scroll flashes
+while the second file decodes. The favicon and app icons are the ampersand from
+the same artwork, set on deep olive.

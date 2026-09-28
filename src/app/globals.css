@@ -15,11 +15,15 @@
   --color-olive-700: #363E28;
   --color-olive-600: #454E33;
   --color-olive-500: #5A6543;
-  --color-olive-400: #7A855E;
+  /* Deepened from #7A855E so small type in this shade clears WCAG AA (4.5:1)
+     on every cream ground, not just the lightest. */
+  --color-olive-400: #636D4C;
   --color-olive-300: #9FA882;
   --color-olive-200: #C2C8AB;
 
   --color-clay: #8C7A5E;
+  /* Form errors: a muted rust that still reads 6.8:1 on cream. */
+  --color-alert: #8B3A2B;
 
   --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
   --font-sans: var(--font-jost), "Jost", ui-sans-serif, system-ui, sans-serif;
@@ -34,6 +38,8 @@
   /* Hairlines are used in dozens of places; one token keeps them consistent. */
   --rule: color-mix(in srgb, var(--color-olive-700) 14%, transparent);
   --rule-light: color-mix(in srgb, var(--color-cream-100) 18%, transparent);
+  /* Announcement bar (36px) + main bar (76px). Inner pages clear it. */
+  --header-h: 112px;
 }
 
 @layer base {
@@ -42,6 +48,11 @@
     color: var(--fg);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    /* Anchor targets land below the fixed header rather than under it. */
+    scroll-padding-top: calc(var(--header-h) + 1.5rem);
+    /* Keep the scrollbar's space when an overlay locks the page, so nothing
+       behind it shifts sideways. */
+    scrollbar-gutter: stable;
   }
 
   /* Lenis drives scrolling; native smooth-scroll would fight it. */
@@ -120,7 +131,8 @@
     transform-origin: right;
     transition: transform 0.5s var(--ease-brand);
   }
-  .link-underline:hover::after {
+  .link-underline:hover::after,
+  .link-underline[aria-current="page"]::after {
     transform: scaleX(1);
     transform-origin: left;
   }
@@ -182,6 +194,114 @@
     width: 2.5rem;
     background: currentColor;
     opacity: 0.35;
+  }
+
+  /*
+    Long-form reading: policies, articles and care guides. Headings switch to
+    the mixed-case serif so pages of text read as a letter rather than a
+    billboard.
+  */
+  .prose-iris {
+    color: var(--color-olive-600);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.9;
+  }
+  .prose-iris > * + * { margin-top: 1.15em; }
+  .prose-iris h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.65rem, 3vw, 2.3rem);
+    line-height: 1.12;
+    color: var(--color-olive-800);
+    margin-top: 2.2em;
+    font-feature-settings: "kern" 1, "liga" 1, "dlig" 1;
+  }
+  .prose-iris h3 {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-olive-700);
+    margin-top: 2.2em;
+  }
+  .prose-iris h2 + *, .prose-iris h3 + * { margin-top: 0.8em; }
+  .prose-iris > :first-child { margin-top: 0; }
+  .prose-iris a {
+    color: var(--color-olive-800);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: color 0.4s var(--ease-brand);
+  }
+  .prose-iris a:hover { color: var(--color-olive-500); }
+  .prose-iris strong { color: var(--color-olive-800); font-weight: 500; }
+  .prose-iris ul, .prose-iris ol { padding-left: 1.4em; }
+  .prose-iris ol { list-style: decimal; }
+  .prose-iris ol li::marker { color: var(--color-olive-500); font-size: 0.9em; }
+  .prose-iris ul li { position: relative; }
+  .prose-iris ul li::before {
+    content: "";
+    position: absolute;
+    left: -1.25em;
+    top: 0.95em;
+    width: 0.6em;
+    height: 1px;
+    background: var(--color-olive-500);
+  }
+  .prose-iris li + li { margin-top: 0.45em; }
+  .prose-iris blockquote {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+    line-height: 1.35;
+    color: var(--color-olive-700);
+    border-left: 1px solid var(--rule);
+    padding-left: 1.5rem;
+    margin-top: 1.8em;
+    margin-bottom: 1.8em;
+  }
+  .prose-iris hr { border: 0; border-top: 1px solid var(--rule); margin: 2.5em 0; }
+
+  .on-dark .prose-iris,
+  .prose-iris.on-dark { color: color-mix(in srgb, var(--color-cream-200) 85%, transparent); }
+  .on-dark .prose-iris h2, .on-dark .prose-iris strong, .on-dark .prose-iris a { color: var(--color-cream-50); }
+
+  /* One field recipe: a label, an underline that darkens on focus, and room
+     beneath for a message so validation never shifts the form. */
+  .field-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-olive-700);
+  }
+  .field-input {
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-olive-700) 32%, transparent);
+    background: transparent;
+    padding: 0.7rem 0;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    color: var(--color-olive-800);
+    border-radius: 0;
+    transition: border-color 0.5s var(--ease-brand);
+  }
+  .field-input::placeholder { color: color-mix(in srgb, var(--color-olive-500) 70%, transparent); }
+  .field-input:focus { outline: none; border-bottom-color: var(--color-olive-800); }
+  .field-input:focus-visible { outline: 1px solid var(--color-olive-600); outline-offset: 4px; }
+  .field-input[aria-invalid="true"] { border-bottom-color: var(--color-alert); }
+  textarea.field-input { resize: vertical; min-height: 8rem; line-height: 1.7; }
+  select.field-input {
+    appearance: none;
+    padding-right: 2rem;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1.5l5 5 5-5' fill='none' stroke='%23363E28' stroke-width='1.2'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 0.25rem center;
   }
 }
 

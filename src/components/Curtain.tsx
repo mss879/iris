@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { EASE_OUT, EASE_IN_OUT } from "@/lib/motion";
+import { introPlayed, markIntroPlayed } from "@/lib/intro";
 import Logo from "./Logo";
 
 const HOLD_MS = 1900;
@@ -18,9 +19,13 @@ const HOLD_MS = 1900;
  */
 export default function Curtain() {
   const reduced = useReducedMotion();
-  const [done, setDone] = useState(false);
+  // Already seen this session (a client-side return to the homepage): skip.
+  const [done, setDone] = useState(introPlayed);
 
   useEffect(() => {
+    if (done) return;
+    markIntroPlayed();
+
     // One timer drives both paths, so state is only set from a callback
     // rather than synchronously inside the effect body. Reduced-motion users
     // get a zero-length hold, which clears the panel on the next tick.
@@ -38,6 +43,8 @@ export default function Curtain() {
       clearTimeout(timer);
       document.body.style.overflow = "";
     };
+    // `done` is only read on the first run; the timer owns it from there.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reduced]);
 
   return (
@@ -74,7 +81,7 @@ export default function Curtain() {
               animate={{ opacity: 1 }}
               transition={{ duration: reduced ? 0 : 1, delay: reduced ? 0 : 0.7 }}
             >
-              Slow fashion — Est. 2019
+              Considered Design · Natural Beauty · Modern Femininity
             </motion.p>
 
             <motion.div
