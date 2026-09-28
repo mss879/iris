@@ -17,6 +17,17 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
 });
 
+// Italic is only used for accents in editorial statements, so it is loaded
+// as its own small face and not preloaded ahead of the page.
+const cormorantItalic = Cormorant_Garamond({
+  variable: "--font-cormorant-italic",
+  subsets: ["latin"],
+  weight: ["300", "400"],
+  style: "italic",
+  display: "swap",
+  preload: false,
+});
+
 const jost = Jost({
   variable: "--font-jost",
   subsets: ["latin"],
@@ -48,7 +59,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en-AU"
-      className={`${cormorant.variable} ${jost.variable} h-full antialiased`}
+      className={`${cormorant.variable} ${cormorantItalic.variable} ${jost.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-cream-100 text-olive-700 flex flex-col">
         <MotionProvider>
