@@ -1,5 +1,5 @@
 import { brandPages, discoverPages, legalPages, servicePages } from "./nav";
-import { categories, collections, products, prints } from "./products";
+import { categories, collections, products } from "./products";
 
 export type SearchEntry = {
   kind: "product" | "page";
@@ -20,8 +20,13 @@ const pages: SearchEntry[] = [
     meta: "Collection",
     extra: `${c.tagline} ${c.intro}`,
   })),
-  ...prints.map((p) => ({ label: p.name, href: "/our-prints", meta: "Our Prints", extra: p.summary })),
   ...brandPages.map((p) => ({ ...p, meta: "IrisandMe", extra: "" })),
+  {
+    label: "Craftsmanship",
+    href: "/our-story#craftsmanship",
+    meta: "Our Story",
+    extra: "design process prints fabric selection fabrics linen cotton construction finishing quality standards",
+  },
   ...servicePages.map((p) => ({ ...p, meta: "Client Services", extra: "help delivery refund exchange sizing" })),
   ...discoverPages.map((p) => ({ ...p, meta: "Discover", extra: "" })),
   ...legalPages.map((p) => ({ ...p, meta: "Legal", extra: "policy" })),

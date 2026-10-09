@@ -8,10 +8,7 @@ import Reveal from "../anim/Reveal";
 import SplitWords from "../anim/SplitWords";
 import { isEmail } from "./Form";
 
-/**
- * The IrisandMe letter. Set as its own band on the homepage (per the brief)
- * and reused at the foot of the Journal.
- */
+/** The IrisandMe letter. Set as its own band on the homepage, per the brief. */
 export default function NewsletterSignup({
   eyebrow = "The IrisandMe Letter",
   title = "Stories, new collections and quiet news",

@@ -47,11 +47,11 @@ export default function CraftMessage() {
           />
           <Reveal delay={0.2}>
             <div className="mt-10 flex flex-wrap gap-x-8 gap-y-4">
-              <TextLink href="/craftsmanship" className="text-olive-700">
+              <TextLink href="/our-story#craftsmanship" className="text-olive-700">
                 Discover Craftsmanship
               </TextLink>
-              <TextLink href="/our-fabrics" className="text-olive-700">
-                Our Fabrics
+              <TextLink href="/our-story#fabric-selection" className="text-olive-700">
+                Fabric Selection
               </TextLink>
             </div>
           </Reveal>

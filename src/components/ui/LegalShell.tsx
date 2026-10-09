@@ -8,9 +8,9 @@ import Prose from "./Prose";
 export type LegalSection = { id: string; title: string; content: ReactNode };
 
 /**
- * Frame for the legal pages: a contents list that stays in view beside the
- * text on wide screens, numbered sections with stable anchors, and the other
- * policies one click away.
+ * Frame for the legal pages: numbered sections with stable anchors, and the
+ * other policies one click away — held beside the text on wide screens and
+ * listed after it on small ones.
  */
 export default function LegalShell({
   current,
@@ -41,26 +41,9 @@ export default function LegalShell({
 
       <div className="bg-cream-100 px-6 py-16 md:px-14 md:py-24">
         <div className="mx-auto grid max-w-[1600px] grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-10">
-          <aside className="lg:col-span-3">
-            <div className="flex flex-col gap-12 lg:sticky lg:top-[calc(var(--header-h)+2.5rem)]">
-              <nav aria-label="On this page">
-                <p className="eyebrow mb-5 text-[10px] text-olive-500">On this page</p>
-                <ol className="flex flex-col gap-2.5">
-                  {sections.map((s, i) => (
-                    <li key={s.id}>
-                      <a
-                        href={`#${s.id}`}
-                        className="group/toc flex gap-3 font-sans text-[13.5px] leading-snug text-olive-600 transition-colors duration-500 hover:text-olive-800"
-                      >
-                        <span className="w-5 shrink-0 text-olive-500">{i + 1}.</span>
-                        <span className="link-underline">{s.title}</span>
-                      </a>
-                    </li>
-                  ))}
-                </ol>
-              </nav>
-
-              <nav aria-label="Legal" className="hidden lg:block">
+          <aside className="hidden lg:col-span-3 lg:block">
+            <div className="lg:sticky lg:top-[calc(var(--header-h)+2.5rem)]">
+              <nav aria-label="Legal">
                 <p className="eyebrow mb-5 text-[10px] text-olive-500">Policies</p>
                 <ul className="flex flex-col gap-2.5">
                   {legalPages.map((p) => (

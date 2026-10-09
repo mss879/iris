@@ -1,5 +1,4 @@
 import type { MetadataRoute } from "next";
-import { articles } from "@/lib/journal";
 import { brandPages, discoverPages, legalPages, servicePages } from "@/lib/nav";
 import { collections, products, shopCategories } from "@/lib/products";
 import { site } from "@/lib/site";
@@ -41,12 +40,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: url(`/products/${p.slug}`),
       changeFrequency: "weekly" as const,
       priority: 0.7,
-    })),
-    ...articles.map((a) => ({
-      url: url(`/journal/${a.slug}`),
-      lastModified: a.date,
-      changeFrequency: "yearly" as const,
-      priority: 0.5,
     })),
   ];
 }

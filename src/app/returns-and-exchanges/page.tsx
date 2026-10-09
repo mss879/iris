@@ -8,32 +8,16 @@ import {
   DetailList,
   Facts,
   HelpPrompt,
-  JumpNav,
   ServiceSection,
   ServiceSections,
   Steps,
   SubHeading,
-  sectionIndex,
-  type JumpLink,
 } from "@/components/services/ServiceBlocks";
 
 export const metadata: Metadata = {
   title: "Returns & Exchanges",
   description: `Return or exchange unworn IrisandMe pieces within ${returns.windowDays} days of delivery. Eligibility, exchanges, refunds, sale items, international returns, return postage and faulty items explained.`,
 };
-
-const toc: JumpLink[] = [
-  { id: "return-period", label: "Return period" },
-  { id: "eligibility", label: "Eligibility" },
-  { id: "how-to-return", label: "How to start a return" },
-  { id: "exchanges", label: "Exchanges" },
-  { id: "refunds", label: "Refunds" },
-  { id: "return-postage", label: "Return postage" },
-  { id: "international-returns", label: "International returns" },
-  { id: "sale-items", label: "Sale items" },
-  { id: "faulty", label: "Damaged or faulty items" },
-];
-const n = (id: string) => sectionIndex(toc, id);
 
 const careEmail = <a href={`mailto:${site.email.care}`}>{site.email.care}</a>;
 
@@ -108,11 +92,8 @@ export default function ReturnsAndExchangesPage() {
       }
     >
       <ServiceSections>
-        <JumpNav items={toc} />
-
         <ServiceSection
           id="return-period"
-          index={n("return-period")}
           eyebrow="At a glance"
           title="Return period"
           intro={`You have ${returns.windowDays} days from the day your order is delivered to start a return or exchange.`}
@@ -146,7 +127,6 @@ export default function ReturnsAndExchangesPage() {
 
         <ServiceSection
           id="eligibility"
-          index={n("eligibility")}
           eyebrow="What can be returned"
           title="Eligibility"
           intro="For a change-of-mind return or exchange, pieces need to come back to us as they arrived."
@@ -187,7 +167,6 @@ export default function ReturnsAndExchangesPage() {
 
         <ServiceSection
           id="how-to-return"
-          index={n("how-to-return")}
           eyebrow="Step by step"
           title="How to start a return"
           intro={`Start within ${returns.windowDays} days of delivery. It only takes a few minutes, and we’ll guide you through each step.`}
@@ -197,7 +176,6 @@ export default function ReturnsAndExchangesPage() {
 
         <ServiceSection
           id="exchanges"
-          index={n("exchanges")}
           eyebrow="A different size"
           title="Exchanges"
         >
@@ -218,7 +196,7 @@ export default function ReturnsAndExchangesPage() {
           </Prose>
         </ServiceSection>
 
-        <ServiceSection id="refunds" index={n("refunds")} eyebrow="Back to you" title="Refunds">
+        <ServiceSection id="refunds" eyebrow="Back to you" title="Refunds">
           <Prose>
             <p>Refunds are made to your original payment method.</p>
             <p>
@@ -237,7 +215,6 @@ export default function ReturnsAndExchangesPage() {
 
         <ServiceSection
           id="return-postage"
-          index={n("return-postage")}
           eyebrow="Sending it back"
           title="Return postage"
         >
@@ -255,7 +232,6 @@ export default function ReturnsAndExchangesPage() {
 
         <ServiceSection
           id="international-returns"
-          index={n("international-returns")}
           eyebrow="Outside Australia"
           title="International returns"
           intro={`International customers can return or exchange pieces within the same ${returns.windowDays}-day window, on the same conditions.`}
@@ -284,7 +260,6 @@ export default function ReturnsAndExchangesPage() {
 
         <ServiceSection
           id="sale-items"
-          index={n("sale-items")}
           eyebrow="Final sale"
           title="Sale items"
         >
@@ -302,7 +277,6 @@ export default function ReturnsAndExchangesPage() {
 
         <ServiceSection
           id="faulty"
-          index={n("faulty")}
           eyebrow="Putting it right"
           title="Damaged or faulty items"
           intro="If a piece arrives damaged or develops a fault, we’ll put it right."

@@ -8,12 +8,9 @@ import Prose from "@/components/ui/Prose";
 import {
   DetailList,
   HelpPrompt,
-  JumpNav,
   ServiceSection,
   ServiceSections,
   SubHeading,
-  sectionIndex,
-  type JumpLink,
 } from "@/components/services/ServiceBlocks";
 
 export const metadata: Metadata = {
@@ -22,18 +19,24 @@ export const metadata: Metadata = {
     "How to care for linen, cotton, printed and delicate pieces — washing, drying, ironing, steaming and storage — so your IrisandMe clothing lasts for years.",
 };
 
-const toc: JumpLink[] = [
-  { id: "care-essentials", label: "Care essentials" },
-  { id: "linen", label: "Linen" },
-  { id: "cotton", label: "Cotton" },
-  { id: "printed-garments", label: "Printed garments" },
-  { id: "delicate-pieces", label: "Delicate pieces" },
-  { id: "ironing-and-steaming", label: "Ironing & steaming" },
-  { id: "drying", label: "Drying" },
-  { id: "storage", label: "Storage" },
-  { id: "mending-and-refreshing", label: "Mending & refreshing" },
+const careHabits = [
+  {
+    title: "Wash less, and cool",
+    body: "Natural fibres rarely need a hot wash. Air a piece between wears, and wash it cool when it needs it — colour and fibre both last longer.",
+  },
+  {
+    title: "Dry in the shade",
+    body: "Sunlight fades colour over time. Line dry out of direct sun, and leave the tumble dryer for other things.",
+  },
+  {
+    title: "Steam rather than press",
+    body: "A little steam releases creases gently. If you iron, use a warm iron while the cloth is slightly damp, on the reverse for prints.",
+  },
+  {
+    title: "Store with room",
+    body: "Hang woven pieces with space around them so they can breathe, and fold knits so they keep their shape.",
+  },
 ];
-const n = (id: string) => sectionIndex(toc, id);
 
 export default function GarmentCarePage() {
   return (
@@ -49,36 +52,14 @@ export default function GarmentCarePage() {
       }
     >
       <ServiceSections>
-        <JumpNav items={toc} />
-
+        {/* Moved here from the former Our Fabrics page. */}
         <ServiceSection
-          id="care-essentials"
-          index={n("care-essentials")}
-          eyebrow="Why care matters"
-          title="Care that makes clothes last"
-          intro="How a garment is cared for shapes its life as much as how it was made. Every gentle wash, every piece dried in the shade and every loose button caught early means fewer faded colours, less stretching and a piece that stays with you."
+          id="care-habits"
+          eyebrow="Care"
+          title="Four habits that help natural fabrics last"
+          intro="Natural fibres reward a little attention. These habits apply to almost everything we make."
         >
-          <FeatureGrid
-            columns={2}
-            items={[
-              {
-                title: "Wash less often",
-                body: "Natural fibres rarely need washing after every wear. Air a piece overnight, spot clean small marks, and save the wash for when it’s truly needed.",
-              },
-              {
-                title: "Wash cool and gentle",
-                body: "A cool, gentle cycle and a mild detergent protect fibres and colour — and use less energy, too.",
-              },
-              {
-                title: "Dry naturally",
-                body: "Skip the tumble dryer. Line dry in the shade, and dry knitwear and silk flat.",
-              },
-              {
-                title: "Store and mend with care",
-                body: "Keep pieces clean, with room to breathe, and fix a loose button or seam before it grows.",
-              },
-            ]}
-          />
+          <FeatureGrid columns={2} items={careHabits} />
 
           <DataTable
             className="mt-20"
@@ -127,15 +108,14 @@ export default function GarmentCarePage() {
 
           <Prose className="mt-10">
             <p>
-              To learn more about the fibres we work with, and why we choose them, visit{" "}
-              <Link href="/our-fabrics">Our Fabrics</Link>.
+              To learn more about the fibres we work with, and why we choose them, read about{" "}
+              <Link href="/our-story#fabric-selection">fabric selection</Link> in Our Story.
             </p>
           </Prose>
         </ServiceSection>
 
         <ServiceSection
           id="linen"
-          index={n("linen")}
           eyebrow="Washed linen & linen twill"
           title="Linen"
           intro="Linen is spun from the flax plant. It is strong and breathable, and it grows softer with every wash and wear — the more it is lived in, the better it feels."
@@ -172,7 +152,6 @@ export default function GarmentCarePage() {
 
         <ServiceSection
           id="cotton"
-          index={n("cotton")}
           eyebrow="Voile, lawn, poplin & jersey"
           title="Cotton"
           intro="Our cotton ranges from fine voile and lawn to crisp poplin and soft jersey. It is breathable and easy to live with, and keeps its shape and colour best when washed cool."
@@ -210,7 +189,6 @@ export default function GarmentCarePage() {
 
         <ServiceSection
           id="printed-garments"
-          index={n("printed-garments")}
           eyebrow="Our prints"
           title="Printed garments"
           intro="Our prints are made to be worn for years. A little extra care — washing inside out and drying away from the sun — keeps their colour clear and their lines crisp."
@@ -247,7 +225,6 @@ export default function GarmentCarePage() {
 
         <ServiceSection
           id="delicate-pieces"
-          index={n("delicate-pieces")}
           eyebrow="Silk & knitwear"
           title="Delicate pieces"
           intro="Silk and fine knitwear ask for the gentlest care of all: cold water, a light touch and time to dry flat."
@@ -311,7 +288,6 @@ export default function GarmentCarePage() {
 
         <ServiceSection
           id="ironing-and-steaming"
-          index={n("ironing-and-steaming")}
           eyebrow="A smooth finish"
           title="Ironing & steaming"
           intro="Steaming relaxes creases without pressing the fibres flat — the gentlest way to refresh linen, silk and fine cotton. An iron gives a crisper finish when you want one."
@@ -361,7 +337,6 @@ export default function GarmentCarePage() {
 
         <ServiceSection
           id="drying"
-          index={n("drying")}
           eyebrow="Air & shade"
           title="Drying"
           intro="Heat is the quickest way to shorten a garment’s life. Drying naturally keeps fibres strong, colours true and each piece in the shape it was made."
@@ -398,7 +373,6 @@ export default function GarmentCarePage() {
 
         <ServiceSection
           id="storage"
-          index={n("storage")}
           eyebrow="Between wears"
           title="Storage"
           intro="How a piece rests between wears matters as much as how it is washed. Store pieces clean, dry and with room to breathe."
@@ -442,7 +416,6 @@ export default function GarmentCarePage() {
 
         <ServiceSection
           id="mending-and-refreshing"
-          index={n("mending-and-refreshing")}
           eyebrow="Keeping pieces in use"
           title="Mending & refreshing"
           intro="Small, regular attention keeps a garment in use for longer — and a well-mended piece often becomes the one you reach for most."

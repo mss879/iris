@@ -10,13 +10,10 @@ import {
   Dash,
   DetailList,
   HelpPrompt,
-  JumpNav,
   ServiceSection,
   ServiceSections,
   SubHeading,
-  sectionIndex,
   type Detail,
-  type JumpLink,
 } from "@/components/services/ServiceBlocks";
 import {
   domestic,
@@ -35,17 +32,6 @@ export const metadata: Metadata = {
     regions.map((r) => regionPhrase(r.region))
   )}, plus tracking, duties, taxes and customs information.`,
 };
-
-const toc: JumpLink[] = [
-  { id: "at-a-glance", label: "Shipping at a glance" },
-  { id: "processing-times", label: "Processing times" },
-  { id: "delivery-by-region", label: "Delivery by region" },
-  { id: "tracking", label: "Tracking" },
-  { id: "duties-and-taxes", label: "Duties & taxes" },
-  { id: "customs", label: "Customs information" },
-  { id: "delays-and-addresses", label: "Delays & addresses" },
-];
-const n = (id: string) => sectionIndex(toc, id);
 
 /** "1–3 business days, $18" — express terms, when a region offers them. */
 const expressTerms = (r: (typeof regions)[number]) =>
@@ -80,11 +66,8 @@ export default function ShippingAndDeliveryPage() {
       }
     >
       <ServiceSections>
-        <JumpNav items={toc} />
-
         <ServiceSection
           id="at-a-glance"
-          index={n("at-a-glance")}
           eyebrow="Rates & times"
           title="Shipping at a glance"
           intro={`Delivery estimates are in business days, counted from dispatch. All charges are in Australian dollars (${site.currency}).`}
@@ -118,7 +101,6 @@ export default function ShippingAndDeliveryPage() {
 
         <ServiceSection
           id="processing-times"
-          index={n("processing-times")}
           eyebrow="Before dispatch"
           title="Processing times"
           intro={`We prepare every order within ${shipping.processing}.`}
@@ -155,7 +137,6 @@ export default function ShippingAndDeliveryPage() {
 
         <ServiceSection
           id="delivery-by-region"
-          index={n("delivery-by-region")}
           eyebrow="Where we deliver"
           title="Delivery by region"
           intro={`How long delivery takes, what it costs and who carries your parcel.${
@@ -176,7 +157,6 @@ export default function ShippingAndDeliveryPage() {
 
         <ServiceSection
           id="tracking"
-          index={n("tracking")}
           eyebrow="Following your parcel"
           title="Tracking your order"
           intro="Every order is sent with tracking, so you can follow it all the way to your door."
@@ -205,7 +185,6 @@ export default function ShippingAndDeliveryPage() {
 
         <ServiceSection
           id="duties-and-taxes"
-          index={n("duties-and-taxes")}
           eyebrow="International orders"
           title="Duties & taxes"
           intro="International orders are sent delivered duties unpaid (DDU). Here’s what that means for you."
@@ -239,7 +218,6 @@ export default function ShippingAndDeliveryPage() {
 
         <ServiceSection
           id="customs"
-          index={n("customs")}
           eyebrow="Paperwork"
           title="Customs information"
           intro="What travels with your parcel, and what to expect at the border."
@@ -278,7 +256,6 @@ export default function ShippingAndDeliveryPage() {
 
         <ServiceSection
           id="delays-and-addresses"
-          index={n("delays-and-addresses")}
           eyebrow="Good to know"
           title="Delays & addresses"
         >

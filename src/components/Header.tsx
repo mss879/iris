@@ -28,7 +28,7 @@ function isActive(href: string, pathname: string) {
         (pathname === "/shop" || pathname.startsWith("/shop/") || pathname.startsWith("/products/"))
       );
     case "/our-story":
-      return brandPages.some((p) => p.href !== "/journal" && p.href === pathname);
+      return brandPages.some((p) => p.href === pathname);
     default:
       return pathname === href || pathname.startsWith(`${href}/`);
   }

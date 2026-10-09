@@ -1,37 +1,64 @@
 import type { ReactNode } from "react";
 import Section, { SectionHeading, type Tone } from "@/components/ui/Section";
+import Figure from "@/components/ui/Figure";
 import Reveal from "@/components/anim/Reveal";
 
+export type StandfirstImage = {
+  src: string;
+  alt: string;
+  position?: string;
+  caption?: ReactNode;
+};
+
 /**
- * The opening band of a brand page, straight after the hero: a section label,
- * the page's argument set large in the mixed-case serif, optional supporting
- * paragraphs, and an optional aside (usually the in-page index).
+ * A titled break inside a Standfirst's copy, set in the serif on a hairline.
+ * The id lets other pages link straight to it — /our-story#fabric-selection.
+ * Utilities sit above `.prose-iris` in the cascade, so these classes win.
+ */
+export function Subhead({ id, children }: { id: string; children: ReactNode }) {
+  return (
+    <h3
+      id={id}
+      className="mt-12 border-t hairline pt-8 font-display text-[clamp(1.5rem,2.4vw,1.9rem)] font-normal normal-case leading-[1.15] tracking-normal text-olive-800 first:mt-0"
+    >
+      {children}
+    </h3>
+  );
+}
+
+/**
+ * A chapter of a brand page told in plain paragraphs: a heading, the argument
+ * set large in the mixed-case serif, then the copy in one readable column.
+ * The copy is set with `.prose-iris`, so paragraphs, h3s, lists and links
+ * inside it need no classes of their own.
+ *
+ * An optional photograph holds its place beside the copy on wide screens
+ * while it scrolls; `reverse` puts it on the left. On phones it follows the
+ * copy, so two photographs never meet across a section break.
  *
  * `heading="label"` sets the h2 as a quiet eyebrow; `heading="display"` gives
- * it the full display treatment where the opening is a chapter in its own
- * right. `after` spans the full measure beneath everything else.
+ * it the full display treatment where the section is a chapter in its own
+ * right.
  */
 export default function Standfirst({
   id,
   title,
-  index,
   eyebrow,
   heading = "label",
   lede,
   children,
-  aside,
-  after,
+  image,
+  reverse = false,
   tone = "paper",
 }: {
   id: string;
   title: string;
-  index?: string;
   eyebrow?: string;
   heading?: "label" | "display";
   lede: ReactNode;
   children?: ReactNode;
-  aside?: ReactNode;
-  after?: ReactNode;
+  image?: StandfirstImage;
+  reverse?: boolean;
   tone?: Tone;
 }) {
   const headingId = `${id}-heading`;
@@ -39,13 +66,18 @@ export default function Standfirst({
   return (
     <Section id={id} tone={tone} labelledBy={headingId}>
       <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-10">
-        <div className={aside ? "lg:col-span-7" : "lg:col-span-10"}>
+        <div
+          className={
+            image
+              ? `lg:col-span-6 ${reverse ? "lg:order-2 lg:col-start-7" : ""}`
+              : "lg:col-span-10"
+          }
+        >
           {heading === "display" ? (
-            <SectionHeading id={headingId} index={index} eyebrow={eyebrow} title={title} />
+            <SectionHeading id={headingId} eyebrow={eyebrow} title={title} />
           ) : (
             <Reveal direction="none">
               <div className="section-index text-olive-500">
-                {index ? <span className="eyebrow">{index}</span> : null}
                 <span className="rule" />
                 <h2 id={headingId} className="eyebrow">
                   {title}
@@ -61,18 +93,34 @@ export default function Standfirst({
           </Reveal>
 
           {children ? (
-            <Reveal delay={0.2}>
-              <div className="mt-10 grid max-w-[60rem] grid-cols-1 gap-6 font-sans text-[15px] leading-[1.9] text-olive-600 md:grid-cols-2 md:gap-10">
-                {children}
-              </div>
+            // A long column is taller than the screen, so it reveals as soon as
+            // its top edge arrives rather than waiting for a share of it.
+            <Reveal delay={0.2} amount={0.02}>
+              <div className="prose-iris mt-10 max-w-[62ch]">{children}</div>
             </Reveal>
           ) : null}
         </div>
 
-        {aside ? <div className="lg:col-span-4 lg:col-start-9 lg:pt-1">{aside}</div> : null}
+        {image ? (
+          <div className={`lg:col-span-5 ${reverse ? "lg:order-1" : "lg:col-start-8"}`}>
+            {/* Capped so the held photograph still fits a short laptop screen. */}
+            <div
+              className={`lg:sticky lg:top-[calc(var(--header-h)+2rem)] lg:max-w-[30rem] ${
+                reverse ? "" : "lg:ml-auto"
+              }`}
+            >
+              <Figure
+                src={image.src}
+                alt={image.alt}
+                ratio="4/5"
+                position={image.position}
+                caption={image.caption}
+                sizes="(max-width: 1024px) 100vw, 40vw"
+              />
+            </div>
+          </div>
+        ) : null}
       </div>
-
-      {after ? <div className="mt-20 md:mt-28">{after}</div> : null}
     </Section>
   );
 }

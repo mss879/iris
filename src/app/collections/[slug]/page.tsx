@@ -34,6 +34,8 @@ export default async function CollectionPage({ params }: PageProps<"/collections
   const items = productsInCollection(collection.slug);
   const worn = items.filter((p) => p.hover).slice(0, 3);
   const others = collections.filter((c) => c.slug !== collection.slug);
+  // With only a couple of other collections, two wide frames fill the row.
+  const wide = others.length < 3;
 
   return (
     <>
@@ -112,16 +114,20 @@ export default async function CollectionPage({ params }: PageProps<"/collections
         <h2 id="other-collections" className="eyebrow mb-8 text-[10px] text-olive-500">
           More collections
         </h2>
-        <ul className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-4 md:gap-x-6">
+        <ul className={`grid grid-cols-2 gap-x-4 gap-y-8 md:gap-x-6 ${wide ? "" : "md:grid-cols-4"}`}>
           {others.map((c) => (
             <li key={c.slug}>
               <Link href={`/collections/${c.slug}`} className="group/o block">
-                <div className="relative aspect-[4/3] overflow-hidden bg-cream-200">
+                <div
+                  className={`relative overflow-hidden bg-cream-200 ${
+                    wide ? "aspect-[4/3] md:aspect-[16/9]" : "aspect-[4/3]"
+                  }`}
+                >
                   <Image
                     src={c.image}
                     alt=""
                     fill
-                    sizes="(max-width: 768px) 50vw, 25vw"
+                    sizes={wide ? "50vw" : "(max-width: 768px) 50vw, 25vw"}
                     className="object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/o:scale-[1.04]"
                   />
                 </div>

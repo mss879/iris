@@ -129,7 +129,7 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
           <p>{product.care}</p>
           <p>
             <Link href="/garment-care">Garment care guide</Link> ·{" "}
-            <Link href="/our-fabrics">Our fabrics</Link>
+            <Link href="/our-story#fabric-selection">How we choose our fabrics</Link>
           </p>
         </>
       ),
@@ -143,7 +143,7 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
               <>
                 <p>{print.summary}</p>
                 <p>
-                  <Link href="/our-prints">The stories behind our prints</Link>
+                  <Link href="/our-story#design-process">How we choose our prints</Link>
                 </p>
               </>
             ),

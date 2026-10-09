@@ -23,14 +23,11 @@ import {
   Dash,
   Facts,
   HelpPrompt,
-  JumpNav,
   ServiceSection,
   ServiceSections,
   Steps,
   SubHeading,
   linkStyles,
-  sectionIndex,
-  type JumpLink,
 } from "@/components/services/ServiceBlocks";
 import { Measure, UnitLabel, UnitProvider, UnitToggle } from "./_components/Units";
 
@@ -39,16 +36,6 @@ export const metadata: Metadata = {
   description:
     "Find your IrisandMe size, with AU, UK, US and EU size conversions, body and garment measurements, how to measure, fit descriptions and our model’s measurements.",
 };
-
-const toc: JumpLink[] = [
-  { id: "size-chart", label: "Size chart" },
-  { id: "body-measurements", label: "Body measurements" },
-  { id: "garment-measurements", label: "Garment measurements" },
-  { id: "how-to-measure", label: "How to measure" },
-  { id: "fit", label: "Fit descriptions" },
-  { id: "model", label: "Our model" },
-];
-const n = (id: string) => sectionIndex(toc, id);
 
 const FIRST = SIZES[0];
 const LAST = SIZES[SIZES.length - 1];
@@ -213,11 +200,8 @@ export default function SizeAndFitPage() {
     >
       <UnitProvider>
         <ServiceSections>
-          <JumpNav items={toc} />
-
           <ServiceSection
             id="size-chart"
-            index={n("size-chart")}
             eyebrow="Conversions"
             title="The IrisandMe size chart"
             intro="Find the size you usually wear in your own country’s sizing, then read across to your IrisandMe size."
@@ -228,7 +212,6 @@ export default function SizeAndFitPage() {
 
           <ServiceSection
             id="body-measurements"
-            index={n("body-measurements")}
             eyebrow="Your measurements"
             title="Body measurements"
             intro="These are measurements of the body, not of the garment. If your measurements fall across two sizes, the fit descriptions below explain which way to go."
@@ -253,7 +236,6 @@ export default function SizeAndFitPage() {
 
           <ServiceSection
             id="garment-measurements"
-            index={n("garment-measurements")}
             eyebrow="The pieces themselves"
             title="Garment measurements"
             intro="For the pieces where proportion matters most, these are measurements of the garment itself, taken with it laid flat. Bust, chest, waist and hip are given as the full circumference."
@@ -322,7 +304,6 @@ export default function SizeAndFitPage() {
 
           <ServiceSection
             id="how-to-measure"
-            index={n("how-to-measure")}
             eyebrow="A soft tape"
             title="How to measure"
             intro="You’ll need a soft tape measure. Measure over light underwear, keeping the tape level and snug but not tight — and ask someone to help if you can, as it’s more accurate."
@@ -362,7 +343,6 @@ export default function SizeAndFitPage() {
 
           <ServiceSection
             id="fit"
-            index={n("fit")}
             eyebrow="How it sits"
             title="Fit descriptions"
             intro="Every IrisandMe piece is cut to one of four fits, named on its product page. Here’s how each is designed to sit, and which size to choose."
@@ -384,7 +364,6 @@ export default function SizeAndFitPage() {
 
           <ServiceSection
             id="model"
-            index={n("model")}
             eyebrow="In our photographs"
             title="Our model"
             intro={`The model in our studio photography is ${model.height} tall and wears size ${model.size}. Compare her measurements with your own to picture how a piece will sit.`}

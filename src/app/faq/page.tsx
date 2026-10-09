@@ -6,11 +6,8 @@ import Accordion from "@/components/ui/Accordion";
 import { site } from "@/lib/site";
 import {
   HelpPrompt,
-  JumpNav,
   ServiceSection,
   ServiceSections,
-  sectionIndex,
-  type JumpLink,
 } from "@/components/services/ServiceBlocks";
 import { toPlainText, topics, type Paragraph } from "./_components/faqs";
 
@@ -19,8 +16,6 @@ export const metadata: Metadata = {
   description:
     "Answers to common questions about sizing, fit, fabrics, care, orders, payments, shipping, international delivery, duties and taxes, returns, exchanges, pre-orders, product availability and gift cards.",
 };
-
-const toc: JumpLink[] = topics.map((t) => ({ id: t.id, label: t.label }));
 
 /** FAQPage structured data, built from the same answers the page shows. */
 const jsonLd = {
@@ -71,19 +66,16 @@ export default function FaqPage() {
         title="Frequently Asked Questions"
         intro={
           <p>
-            Quick answers to the questions we’re asked most. Choose a topic below, or write to us —
-            we reply to every message {site.responseTime}.
+            Quick answers to the questions we’re asked most, grouped by topic. Can’t find yours?
+            Write to us — we reply to every message {site.responseTime}.
           </p>
         }
       >
         <ServiceSections compact>
-          <JumpNav items={toc} label="Browse by topic" />
-
           {topics.map((topic) => (
             <ServiceSection
               key={topic.id}
               id={topic.id}
-              index={sectionIndex(toc, topic.id)}
               eyebrow={`${topic.questions.length} questions`}
               title={topic.label}
             >

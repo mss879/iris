@@ -9,8 +9,6 @@ import {
   Facts,
   ServiceSection,
   ServiceSections,
-  sectionIndex,
-  type JumpLink,
 } from "@/components/services/ServiceBlocks";
 import { capitalise } from "@/components/services/facts";
 
@@ -18,15 +16,6 @@ export const metadata: Metadata = {
   title: "Contact",
   description: `Contact the IrisandMe Client Services team about an order, sizing and fit, returns or anything else. We reply to every message ${site.responseTime}.`,
 };
-
-const toc: JumpLink[] = [
-  { id: "contact-details", label: "Contact details" },
-  { id: "send-a-message", label: "Send us a message" },
-  { id: "sizing-assistance", label: "Sizing & fit assistance" },
-  { id: "order-assistance", label: "Order assistance" },
-  { id: "other-enquiries", label: "Other enquiries" },
-];
-const n = (id: string) => sectionIndex(toc, id);
 
 export default function ContactPage() {
   return (
@@ -45,7 +34,6 @@ export default function ContactPage() {
       <ServiceSections>
         <ServiceSection
           id="contact-details"
-          index={n("contact-details")}
           eyebrow="Speak with us"
           title="Contact details"
         >
@@ -69,7 +57,6 @@ export default function ContactPage() {
 
         <ServiceSection
           id="send-a-message"
-          index={n("send-a-message")}
           eyebrow="Write to us"
           title="Send us a message"
           intro={`Tell us a little about what you need and we’ll reply ${site.responseTime}. If your message is about an order, please include your order number.`}
@@ -79,7 +66,6 @@ export default function ContactPage() {
 
         <ServiceSection
           id="sizing-assistance"
-          index={n("sizing-assistance")}
           eyebrow="Sizing & fit"
           title="Sizing & fit assistance"
           intro="Between sizes, or unsure how a piece will sit? We’re happy to help you choose."
@@ -104,7 +90,6 @@ export default function ContactPage() {
 
         <ServiceSection
           id="order-assistance"
-          index={n("order-assistance")}
           eyebrow="Orders"
           title="Order assistance"
           intro="Include your order number in your message so we can find your order straight away."
@@ -143,7 +128,6 @@ export default function ContactPage() {
 
         <ServiceSection
           id="other-enquiries"
-          index={n("other-enquiries")}
           eyebrow="Press & stockists"
           title="Other enquiries"
         >

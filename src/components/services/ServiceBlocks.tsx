@@ -5,8 +5,8 @@ import ButtonLink from "@/components/ui/ButtonLink";
 /**
  * Building blocks shared by the six Client Services pages — Contact, Size &
  * Fit, Garment Care, Shipping & Delivery, Returns & Exchanges and FAQ — so
- * they keep one rhythm: numbered sections, the same sub-headings, fact lists
- * and closing prompt. They live beside /contact because it is the Client
+ * they keep one rhythm: the same sections, sub-headings, fact lists and
+ * closing prompt. They live beside /contact because it is the Client
  * Services landing page (ServiceShell's breadcrumb points there).
  */
 
@@ -63,46 +63,6 @@ export function ServiceSection({
       />
       {children ? <div className="mt-10 md:mt-12">{children}</div> : null}
     </section>
-  );
-}
-
-export type JumpLink = { id: string; label: string };
-
-/** "01", "02"… — a section's number, taken from its place in the page index. */
-export function sectionIndex(toc: readonly JumpLink[], id: string) {
-  const i = toc.findIndex((t) => t.id === id);
-  return i < 0 ? undefined : String(i + 1).padStart(2, "0");
-}
-
-/** "On this page" index, numbered to match the sections it points to. */
-export function JumpNav({
-  items,
-  label = "On this page",
-}: {
-  items: readonly JumpLink[];
-  label?: string;
-}) {
-  return (
-    <nav aria-label={label} className="border-y hairline py-8">
-      <p aria-hidden="true" className="eyebrow text-[10px] text-olive-500">
-        {label}
-      </p>
-      <ol className="mt-6 grid grid-cols-1 gap-x-8 gap-y-3.5 sm:grid-cols-2 xl:grid-cols-3">
-        {items.map((item, i) => (
-          <li key={item.id}>
-            <a
-              href={`#${item.id}`}
-              className="flex items-baseline gap-4 font-sans text-[14px] leading-snug text-olive-700 transition-colors duration-500 hover:text-olive-800"
-            >
-              <span aria-hidden="true" className="w-6 shrink-0 text-[12px] text-olive-500">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <span className="link-underline">{item.label}</span>
-            </a>
-          </li>
-        ))}
-      </ol>
-    </nav>
   );
 }
 

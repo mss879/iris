@@ -10,29 +10,6 @@ import ChapterPlate from "./_components/ChapterPlate";
 import LookFigure from "./_components/LookFigure";
 import { chapters, type Look } from "./_data/looks";
 
-const description =
-  "The IrisandMe lookbook: The Linen Edit, We Love Cotton, The Resort Collection, The Lotus Collection and Limited Editions — pieces in natural fabrics, photographed as they are meant to be worn.";
-
-export const metadata: Metadata = {
-  title: "Lookbook",
-  description,
-  alternates: { canonical: "/lookbook" },
-  openGraph: {
-    type: "website",
-    siteName: site.name,
-    locale: "en_AU",
-    url: "/lookbook",
-    title: "The Lookbook",
-    description,
-    images: [
-      {
-        url: "/img/hero-wide.jpg",
-        alt: "A woman in a floor-length deep olive gown standing in a sunlit travertine hall",
-      },
-    ],
-  },
-};
-
 type NumberedLook = { look: Look; number?: number };
 type ChapterView = {
   collection: Collection;
@@ -43,7 +20,8 @@ type ChapterView = {
 
 /**
  * Looks are numbered straight through the book, as on a runway card; detail
- * photographs without pieces are left unnumbered.
+ * photographs without pieces are left unnumbered. Chapters for collections
+ * that are switched off are left out.
  */
 const book: ChapterView[] = (() => {
   let count = 0;
@@ -67,6 +45,35 @@ const book: ChapterView[] = (() => {
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
+/** The number of chapters in words, so the copy stays true as collections come and go. */
+const chapterCount =
+  ["no", "one", "two", "three", "four", "five", "six", "seven"][book.length] ?? String(book.length);
+const ChapterCount = chapterCount.charAt(0).toUpperCase() + chapterCount.slice(1);
+
+const description = `The IrisandMe lookbook: ${book
+  .map((c) => c.collection.name)
+  .join(", ")} — pieces in natural fabrics, photographed as they are meant to be worn.`;
+
+export const metadata: Metadata = {
+  title: "Lookbook",
+  description,
+  alternates: { canonical: "/lookbook" },
+  openGraph: {
+    type: "website",
+    siteName: site.name,
+    locale: "en_AU",
+    url: "/lookbook",
+    title: "The Lookbook",
+    description,
+    images: [
+      {
+        url: "/img/hero-wide.jpg",
+        alt: "A woman in a floor-length deep olive gown standing in a sunlit travertine hall",
+      },
+    ],
+  },
+};
+
 /** LOOKBOOK — an image-led editorial, one chapter per collection. */
 export default function LookbookPage() {
   return (
@@ -76,9 +83,9 @@ export default function LookbookPage() {
         image="/img/hero-wide.jpg"
         imageAlt="A woman in a floor-length deep olive gown standing in a sunlit travertine hall"
         position="70% center"
-        eyebrow="Five collections"
+        eyebrow={`${ChapterCount} collections`}
         title="The Lookbook"
-        intro="Linen in coastal light, cotton on whitewashed lanes, prints beside still water. Five collections, worn as they were made to be."
+        intro={`Linen in coastal light, cotton on whitewashed lanes, long days by the sea. ${ChapterCount} collections, worn as they were made to be.`}
         crumbs={[{ label: "Home", href: "/" }, { label: "Lookbook" }]}
       >
         <nav aria-label="Lookbook chapters">
@@ -101,8 +108,8 @@ export default function LookbookPage() {
       <div className="bg-cream-100 px-6 py-20 md:px-14 md:py-28">
         <Reveal>
           <p className="serif mx-auto max-w-[36ch] text-center text-[clamp(1.5rem,2.8vw,2.3rem)] leading-[1.35] text-olive-700">
-            Five collections, one way of dressing: natural cloth, easy shapes and prints drawn by hand —
-            pieces made to be worn together, season after season.
+            {ChapterCount} collections, one way of dressing: natural cloth, easy shapes and prints
+            drawn by hand — pieces made to be worn together, season after season.
           </p>
         </Reveal>
       </div>
@@ -159,7 +166,7 @@ export default function LookbookPage() {
       <CtaBand
         eyebrow="Continue"
         title="Explore the collections"
-        body="Every look belongs to one of five collections, each with its own story — and every piece is made to be worn well beyond a single season."
+        body={`Every look belongs to one of ${chapterCount} collections, each with its own story — and every piece is made to be worn well beyond a single season.`}
         primary={{ label: "View the collections", href: "/collections" }}
         secondary={{ label: "Shop new arrivals", href: "/shop/new-arrivals" }}
       />

@@ -2,9 +2,9 @@
 
 The IrisandMe website — a women's label working in linen, cotton and natural
 fibres. The site follows the client's structure document ("IrisandMe website
-structure") page for page: an editorial homepage, the shop, the collections,
-the IrisandMe brand world, client services, discover pages, the customer area
-and the legal pages.
+structure"), as trimmed at the client's first review: an editorial homepage,
+the shop, the collections, the IrisandMe brand world, client services,
+discover pages, the customer area and the legal pages.
 
 Next.js 16.3 · React 19.2 · Tailwind CSS 4 · Motion 13 · Lenis
 
@@ -25,15 +25,12 @@ Numbers follow the client's brief.
 | | New Arrivals · Shop All · Dresses · Tops & Shirts · Skirts · Trousers & Shorts · Sets / Co-ords · Essentials | `/shop/[category]` |
 | | Sale — built but switched off ("to be added later") | `enabled: false` in `src/lib/products.ts` |
 | | Product pages | `/products/[slug]` |
-| 3 | Collections — The Linen Edit, We Love Cotton, The Resort Collection, The Lotus Collection, Limited Editions | `/collections`, `/collections/[slug]` |
-| 4 | Our Story | `/our-story` |
+| 3 | Collections — The Linen Edit, We Love Cotton, The Resort Collection | `/collections`, `/collections/[slug]` |
+| | The Lotus Collection, Limited Editions — switched off for now | `enabled: false` in `src/lib/products.ts` |
+| 4 | Our Story — Who we are, then Craftsmanship: design process (with how prints are chosen), fabric selection, construction, finishing, quality standards | `/our-story` |
 | 5 | Our Philosophy | `/our-philosophy` |
-| 6 | Craftsmanship | `/craftsmanship` |
-| 7 | Our Fabrics | `/our-fabrics` |
-| 8 | Our Prints | `/our-prints` |
 | 9 | Consciously IrisandMe | `/consciously-irisandme` |
-| 10 | People & Purpose | `/people-and-purpose` |
-| 11 | The Journal — The Art of Linen, How to Style Linen, Seasonal Trends | `/journal`, `/journal/[slug]` |
+| 10 | People & Purpose — Support for Children | `/people-and-purpose` |
 | 12 | Size & Fit | `/size-and-fit` |
 | 13 | Garment Care | `/garment-care` |
 | 14 | Shipping & Delivery | `/shipping-and-delivery` |
@@ -50,12 +47,38 @@ Numbers follow the client's brief.
 | 26–30 | Privacy Policy · Terms & Conditions · Shipping Policy · Returns & Refund Policy · Cookie Policy | `/privacy-policy`, `/terms-and-conditions`, `/shipping-policy`, `/returns-policy`, `/cookie-policy` |
 | 31 | Accessibility | `/accessibility` |
 
-The main menu is exactly **NEW IN | SHOP | COLLECTIONS | OUR STORY | JOURNAL**
-(SHOP, COLLECTIONS and OUR STORY open dropdowns), and the footer carries the
-four briefed columns — IRISANDME, CLIENT SERVICES, DISCOVER, LEGAL — followed
-by Instagram and Facebook. Client Services and Track My Order sit in the
-utility strip above the header on every page, so order tracking can be found
+The main menu is **NEW IN | SHOP | COLLECTIONS | OUR STORY** (SHOP,
+COLLECTIONS and OUR STORY open dropdowns), and the footer carries the four
+briefed columns — IRISANDME, CLIENT SERVICES, DISCOVER, LEGAL — followed by
+Instagram and Facebook. Client Services and Track My Order sit in the utility
+strip above the header on every page, so order tracking can be found
 immediately.
+
+### First review
+
+The client's first review cut the brand world back:
+
+- **Our Story** is now short: the "Who we are" story in plain paragraphs, then
+  a Craftsmanship section (design process with how prints are chosen, fabric
+  selection, construction, finishing, quality standards), ending on the
+  "Made to last" band.
+- **Craftsmanship, Our Fabrics and Our Prints** are folded into Our Story. Their
+  old addresses redirect to the matching section (`next.config.ts`). The four
+  care habits from Our Fabrics moved to Garment Care.
+- **Our Philosophy** is one run of paragraphs, with the six principles as
+  points under "What guides every piece".
+- **Consciously IrisandMe** keeps natural fibres, recycled materials,
+  small-batch production and packaging; responsible material choices and
+  garment longevity are one paragraph each. Waste reduction, ethical
+  manufacturing and future commitments are gone.
+- **People & Purpose** keeps Support for Children only, for now.
+- **The Journal** is gone, and **The Lotus Collection** and **Limited
+  Editions** are switched off for now (their pieces stay in the shop).
+- The **"On this page" index** is gone from every page, along with the section
+  numbers it mirrored.
+
+Everything removed is in the git history (commit `0b46926` and earlier) if any
+of it comes back.
 
 ## Where content lives
 
@@ -65,13 +88,11 @@ Everything the pages repeat is defined once:
 | --- | --- |
 | `src/lib/site.ts` | Contact emails, hours, response time, social links, shipping regions and rates, returns window, gift card rules, payment methods |
 | `src/lib/sizing.ts` | Size conversions (AU/UK/US/EU), body measurements, fit descriptions, model measurements, garment measurements |
-| `src/lib/products.ts` | Shop categories, collections, signature prints and every product |
-| `src/lib/journal.ts` | Journal articles, written as typed content blocks |
+| `src/lib/products.ts` | Shop categories, collections (each with an `enabled` switch), signature prints and every product |
 | `src/lib/nav.ts` | Main menu, footer columns and the page families |
 | `src/app/lookbook/_data/looks.ts` | Lookbook chapters and the pieces worn in each look |
 | `src/app/stockists/_data/stockists.ts` | Boutique stockists — empty until the first boutique joins; the page lists them by region once added |
 | `src/app/press/_data/press.ts` | As Seen In, press features, editorial shoots and placements — each section appears once it has an entry |
-| `src/app/people-and-purpose/_components/initiatives.ts` | Women's empowerment and children's initiatives — empty until programs are established |
 | `src/app/faq/_components/faqs.ts` | FAQ answers, used for both the page and its structured data |
 
 Change a value in `site.ts` and every page that quotes it — service pages,
@@ -95,12 +116,13 @@ launch:
 - Instagram and Facebook handles (`@irisandme`) and the domain.
 - Brand story specifics (founding, people, workshops) — the copy describes the
   brand's approach without inventing facts, so real details can be added. The
-  making process (sampling, fabric selection, construction, finishing,
-  printing methods, the quality checklist) is written as the house's practice
-  and should be checked against how IrisandMe actually works.
-- Consciously IrisandMe and People & Purpose state intentions and future
-  commitments, never achievements; confirm each commitment is one the
-  business is willing to make publicly.
+  making process on Our Story (design process and how prints are chosen,
+  fabric selection, construction, finishing, the quality checks) is written as
+  the house's practice and should be checked against how IrisandMe actually
+  works.
+- Consciously IrisandMe and People & Purpose state intentions, never
+  achievements; confirm each one is something the business is willing to say
+  publicly.
 - Care guidance against the real care labels, and the fabric compositions of
   each product.
 - The press boilerplate and the press office offer (imagery, samples,
@@ -153,16 +175,18 @@ Pages are composed from `src/components/ui/`:
 | --- | --- |
 | `PageHero` | Opening band — `plain`, `split` (type + portrait) or `image` (full bleed) |
 | `Section`, `SectionHeading` | Bands on one spacing rhythm; numeral, rule, label and a word-by-word heading |
-| `SplitFeature`, `FeatureGrid`, `Figure`, `PullQuote`, `CtaBand` | Editorial building blocks |
-| `ServiceShell` | Client Services pages: hero plus a sticky index of every service page |
-| `LegalShell` | Policies: contents list, numbered sections, other policies |
+| `SplitFeature`, `FeatureGrid`, `Figure`, `CtaBand` | Editorial building blocks |
+| `ServiceShell` | Client Services pages: hero plus a sticky list of every service page |
+| `LegalShell` | Policies: numbered sections and the other policies |
 | `Accordion`, `Tabs`, `DataTable` | Accessible disclosure, tabs and reference tables |
 | `Form` | Text, select, textarea and checkbox fields with labels, hints and errors |
 | `NewsletterSignup`, `EmptyState`, `ContinueExploring`, `ButtonLink` | Shared pieces |
 
-`src/components/brand/` holds the pieces shared by the IrisandMe brand pages
-(standfirsts, page indexes, checklists, print index) and
-`src/components/services/` those shared by the Client Services pages.
+`src/components/brand/Standfirst.tsx` sets the brand pages' story sections — a
+heading, a serif lede and plain paragraphs beside one held photograph — with
+`Subhead` for titled breaks such as the stages of the making.
+`src/components/services/` holds the pieces shared by the Client Services
+pages.
 
 Motion primitives are in `src/components/anim/` (`Reveal`, `SplitWords`,
 `Parallax`, `ScrollProgress`), all timed from `src/lib/motion.ts`. Photographs
@@ -173,8 +197,8 @@ fail silently and leave images hidden.
 
 All photographs in `public/img/` are generated placeholders in one cream and
 deep-olive art direction, ready to be swapped for the client's own shoots. The
-close-ups of linen, stitching, buttons, prints and garment details the brief
-asks for on Craftsmanship are in `craft-*.jpg`; fabrics in `fabric-*.jpg`;
+close-ups of linen, stitching, buttons, prints and garment details are in
+`craft-*.jpg`; fabrics in `fabric-*.jpg`;
 prints in `print-*.jpg`; collection campaigns in `col-*.jpg`; product studio
 and lifestyle frames in `p-*.jpg` and `l-*.jpg`.
 

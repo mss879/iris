@@ -113,9 +113,11 @@ export type Collection = {
   intro: string;
   story: string[];
   note?: string;
+  /** Collections taken off the site for now. Their pieces stay in the shop. */
+  enabled: boolean;
 };
 
-export const collections: Collection[] = [
+const allCollections: Collection[] = [
   {
     slug: "the-linen-edit",
     name: "The Linen Edit",
@@ -129,6 +131,7 @@ export const collections: Collection[] = [
       "Linen is the fabric we return to most. It breathes, it lasts, and it carries the small irregularities of the flax it is spun from — a texture no synthetic can imitate.",
       "The Linen Edit keeps to a quiet palette of raw cream and deep olive so that every piece works with every other. Nothing here is designed for a single season; each piece is meant to be reached for year after year.",
     ],
+    enabled: true,
   },
   {
     slug: "we-love-cotton",
@@ -143,6 +146,7 @@ export const collections: Collection[] = [
       "Cotton is honest and generous: soft against the skin, easy to care for and comfortable from morning until night.",
       "Here it carries two of our signature prints, The Iris and Botanical Studies, alongside the plain cotton pieces that anchor a wardrobe.",
     ],
+    enabled: true,
   },
   {
     slug: "the-resort-collection",
@@ -157,6 +161,7 @@ export const collections: Collection[] = [
       "Designed around the rhythm of a slower holiday — a swim before breakfast, a long lunch, a walk as the light turns gold.",
       "Every piece folds small, creases gracefully and pairs with the rest, so a few pieces make a whole trip.",
     ],
+    enabled: true,
   },
   {
     slug: "the-lotus-collection",
@@ -171,6 +176,8 @@ export const collections: Collection[] = [
       "The lotus connects two things we care about deeply: the natural world, and the heritage of pattern-making that has celebrated it for centuries.",
       "We print it in deep olive on cream so it reads softly, like a drawing, and place it on shapes you can wear for years.",
     ],
+    // Taken off for now at the client's first review. Flip to true to bring it back.
+    enabled: false,
   },
   {
     slug: "limited-editions",
@@ -186,8 +193,13 @@ export const collections: Collection[] = [
       "Each piece is released in a small quantity and numbered, so it remains as individual as the woman who wears it.",
     ],
     note: "Released in small, numbered runs",
+    // Taken off for now at the client's first review. Flip to true to bring it back.
+    enabled: false,
   },
 ];
+
+/** The collections on the site, in menu order. */
+export const collections = allCollections.filter((c) => c.enabled);
 
 export const getCollection = (slug: string) => collections.find((c) => c.slug === slug);
 

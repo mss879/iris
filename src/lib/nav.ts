@@ -2,27 +2,28 @@ import { site } from "./site";
 
 export type NavLink = { label: string; href: string };
 
-/** Primary menu, exactly as briefed: NEW IN | SHOP | COLLECTIONS | OUR STORY | JOURNAL. */
+/**
+ * Primary menu: NEW IN | SHOP | COLLECTIONS | OUR STORY. The Journal was
+ * briefed as a fifth item and taken off at the client's first review.
+ */
 export const mainNav = [
   { label: "New In", href: "/shop/new-arrivals" },
   { label: "Shop", href: "/shop", menu: "shop" },
   { label: "Collections", href: "/collections", menu: "collections" },
   { label: "Our Story", href: "/our-story", menu: "story" },
-  { label: "Journal", href: "/journal" },
 ] as const;
 
 export type MenuKey = "shop" | "collections" | "story";
 
-/** The IrisandMe world — also the order the brand pages page through. */
+/**
+ * The IrisandMe world — also the order the brand pages page through.
+ * Craftsmanship, Our Fabrics and Our Prints now live inside Our Story.
+ */
 export const brandPages: NavLink[] = [
   { label: "Our Story", href: "/our-story" },
   { label: "Our Philosophy", href: "/our-philosophy" },
-  { label: "Craftsmanship", href: "/craftsmanship" },
-  { label: "Our Fabrics", href: "/our-fabrics" },
-  { label: "Our Prints", href: "/our-prints" },
   { label: "Consciously IrisandMe", href: "/consciously-irisandme" },
   { label: "People & Purpose", href: "/people-and-purpose" },
-  { label: "Journal", href: "/journal" },
 ];
 
 export const servicePages: NavLink[] = [

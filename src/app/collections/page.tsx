@@ -9,8 +9,7 @@ import { collections, productsInCollection } from "@/lib/products";
 
 export const metadata: Metadata = {
   title: "Collections",
-  description:
-    "The IrisandMe collections: The Linen Edit, We Love Cotton, The Resort Collection, The Lotus Collection and Limited Editions.",
+  description: `The IrisandMe collections: ${collections.map((c) => c.name).join(", ")}.`,
 };
 
 /**
@@ -23,7 +22,7 @@ export default function CollectionsPage() {
       <PageHero
         eyebrow="Collections"
         title="The Collections"
-        intro="Five stories, each told through fabric, print and shape. Together they make a wardrobe that belongs to no single season."
+        intro="Each collection tells its story through fabric, print and shape. Together they make a wardrobe that belongs to no single season."
         crumbs={[{ label: "Home", href: "/" }, { label: "Collections" }]}
       />
 

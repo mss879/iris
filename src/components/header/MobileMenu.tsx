@@ -13,7 +13,7 @@ import { ChevronIcon, CloseIcon } from "../icons";
 const groups: Record<string, { label: string; href: string }[]> = {
   shop: shopCategories.map((c) => ({ label: c.label, href: `/shop/${c.slug}` })),
   collections: collections.map((c) => ({ label: c.name, href: `/collections/${c.slug}` })),
-  story: brandPages.filter((p) => p.href !== "/journal"),
+  story: brandPages,
 };
 
 const utility = [
@@ -24,7 +24,7 @@ const utility = [
   { label: "Size & Fit", href: "/size-and-fit" },
 ];
 
-/** Full-screen menu for small screens: the five main items, each section opening in place. */
+/** Full-screen menu for small screens: the main items, each section opening in place. */
 export default function MobileMenu({ onClose }: { onClose: () => void }) {
   const ref = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState<string | null>(null);
