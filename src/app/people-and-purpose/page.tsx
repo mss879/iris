@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/ui/PageHero";
 import Section, { SectionHeading } from "@/components/ui/Section";
-import ContinueExploring from "@/components/ui/ContinueExploring";
 import Reveal from "@/components/anim/Reveal";
 
 export const metadata: Metadata = {
@@ -60,8 +59,6 @@ export default function PeopleAndPurposePage() {
           </Reveal>
         </div>
       </Section>
-
-      <ContinueExploring current="/people-and-purpose" />
     </>
   );
 }

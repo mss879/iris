@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "@/components/ui/PageHero";
-import CtaBand from "@/components/ui/CtaBand";
-import ContinueExploring from "@/components/ui/ContinueExploring";
 import Standfirst, { Subhead } from "@/components/brand/Standfirst";
 
 export const metadata: Metadata = {
@@ -107,15 +105,6 @@ export default function OurPhilosophyPage() {
           care guidance, and our <Link href="/garment-care">garment care guide</Link> goes further.
         </p>
       </Standfirst>
-
-      <CtaBand
-        eyebrow="In practice"
-        title="See the philosophy in the making"
-        body="From the first sketch to the final check, this is how our principles become clothing."
-        primary={{ label: "Craftsmanship", href: "/our-story#craftsmanship" }}
-      />
-
-      <ContinueExploring current="/our-philosophy" />
     </>
   );
 }

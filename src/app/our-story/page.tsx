@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "@/components/ui/PageHero";
 import CtaBand from "@/components/ui/CtaBand";
-import ContinueExploring from "@/components/ui/ContinueExploring";
 import Standfirst, { Subhead } from "@/components/brand/Standfirst";
 import { returns } from "@/lib/site";
 
@@ -175,8 +174,6 @@ export default function OurStoryPage() {
         image="/img/journal-1.jpg"
         imageAlt="Hands working a length of cream fabric beside spools of olive thread"
       />
-
-      <ContinueExploring current="/our-story" />
     </>
   );
 }

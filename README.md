@@ -77,7 +77,17 @@ The client's first review cut the brand world back:
 - The **"On this page" index** is gone from every page, along with the section
   numbers it mirrored.
 
-Everything removed is in the git history (commit `0b46926` and earlier) if any
+### Second review
+
+- **Our Philosophy** ends on "What guides every piece"; the "In practice" band
+  is gone.
+- **Consciously IrisandMe** is now "Where we stand" leading into small-batch
+  production, then the questions band. Natural fibres, responsible material
+  choices, recycled materials, packaging and garment longevity are gone.
+- The **"Continue exploring"** pager is gone from all four Our Story pages; the
+  Our Story menu already lists them.
+
+Everything removed is in the git history (commit `8888faf` and earlier) if any
 of it comes back.
 
 ## Where content lives
