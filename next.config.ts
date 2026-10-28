@@ -2,15 +2,21 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /*
-    Craftsmanship, Our Fabrics and Our Prints were folded into Our Story at the
-    client's first review. Their old addresses land on the matching part of it.
+    Pages the client's reviews folded into Our Story or took out. Their old
+    addresses land on Our Story, or on the section that replaced them.
     Temporary, so nothing is cached for good while the site is still in review.
   */
   async redirects() {
     return [
-      { source: "/craftsmanship", destination: "/our-story#craftsmanship", permanent: false },
-      { source: "/our-fabrics", destination: "/our-story#fabric-selection", permanent: false },
-      { source: "/our-prints", destination: "/our-story#design-process", permanent: false },
+      { source: "/our-philosophy", destination: "/our-story", permanent: false },
+      {
+        source: "/consciously-irisandme",
+        destination: "/our-story#consciously-irisandme",
+        permanent: false,
+      },
+      { source: "/craftsmanship", destination: "/our-story", permanent: false },
+      { source: "/our-fabrics", destination: "/our-story", permanent: false },
+      { source: "/our-prints", destination: "/our-story", permanent: false },
     ];
   },
 };

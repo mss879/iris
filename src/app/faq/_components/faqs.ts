@@ -144,9 +144,7 @@ export const topics: Topic[] = [
         question: "What fabrics do you use?",
         answer: [
           [
-            `We work with natural fibres: ${listJoin(fibres)}. Each product page lists the fabric and its composition, and you can read how we choose each one under `,
-            link("/our-story#fabric-selection", "fabric selection"),
-            " in Our Story.",
+            `We work with natural fibres: ${listJoin(fibres)}. Each product page lists the fabric and its composition.`,
           ],
         ],
       },

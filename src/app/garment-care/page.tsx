@@ -105,13 +105,6 @@ export default function GarmentCarePage() {
             minWidth={820}
             note="Always check the care label inside your garment first, as it is written for that piece. You’ll also find care instructions on every product page."
           />
-
-          <Prose className="mt-10">
-            <p>
-              To learn more about the fibres we work with, and why we choose them, read about{" "}
-              <Link href="/our-story#fabric-selection">fabric selection</Link> in Our Story.
-            </p>
-          </Prose>
         </ServiceSection>
 
         <ServiceSection

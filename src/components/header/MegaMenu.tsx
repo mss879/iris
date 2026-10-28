@@ -62,18 +62,18 @@ const menus: Record<
     links: brandPages,
     cards: [
       {
-        label: "Craftsmanship",
-        caption: "How each piece is made",
-        href: "/our-story#craftsmanship",
-        image: "/img/editorial-craft.jpg",
-        alt: "Hands unrolling cream linen beside a bolt of olive silk on a wooden atelier table",
-      },
-      {
-        label: "Consciously IrisandMe",
-        caption: "Our approach to responsibility",
-        href: "/consciously-irisandme",
+        label: "Who we are",
+        caption: "Our story, and Consciously Iris&Me",
+        href: "/our-story",
         image: "/img/ugc-5.jpg",
         alt: "A woman in deep olive linen trousers seated on a wooden bench, holding a bunch of dried flowers",
+      },
+      {
+        label: "People & Purpose of Iris&Me",
+        caption: "Rooted in humanity, created with purpose",
+        href: "/people-and-purpose",
+        image: "/img/promise-lux.jpg",
+        alt: "Three women in deep olive and cream linen standing together in a bright studio",
       },
     ],
   },

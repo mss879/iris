@@ -128,8 +128,7 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
           </p>
           <p>{product.care}</p>
           <p>
-            <Link href="/garment-care">Garment care guide</Link> ·{" "}
-            <Link href="/our-story#fabric-selection">How we choose our fabrics</Link>
+            <Link href="/garment-care">Garment care guide</Link>
           </p>
         </>
       ),
@@ -139,14 +138,7 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
           {
             id: "print",
             title: `About the print — ${print.name}`,
-            content: (
-              <>
-                <p>{print.summary}</p>
-                <p>
-                  <Link href="/our-story#design-process">How we choose our prints</Link>
-                </p>
-              </>
-            ),
+            content: <p>{print.summary}</p>,
           },
         ]
       : []),

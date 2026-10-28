@@ -16,14 +16,12 @@ export const mainNav = [
 export type MenuKey = "shop" | "collections" | "story";
 
 /**
- * The IrisandMe world — also the order the brand pages page through.
- * Craftsmanship, Our Fabrics and Our Prints now live inside Our Story.
+ * The IrisandMe world: the two headings under OUR STORY. Consciously Iris&Me
+ * is a section of Who we are, on the Our Story page.
  */
 export const brandPages: NavLink[] = [
-  { label: "Our Story", href: "/our-story" },
-  { label: "Our Philosophy", href: "/our-philosophy" },
-  { label: "Consciously IrisandMe", href: "/consciously-irisandme" },
-  { label: "People & Purpose", href: "/people-and-purpose" },
+  { label: "Who we are", href: "/our-story" },
+  { label: "People & Purpose of Iris&Me", href: "/people-and-purpose" },
 ];
 
 export const servicePages: NavLink[] = [

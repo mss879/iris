@@ -27,10 +27,8 @@ Numbers follow the client's brief.
 | | Product pages | `/products/[slug]` |
 | 3 | Collections — The Linen Edit, We Love Cotton, The Resort Collection | `/collections`, `/collections/[slug]` |
 | | The Lotus Collection, Limited Editions — switched off for now | `enabled: false` in `src/lib/products.ts` |
-| 4 | Our Story — Who we are, then Craftsmanship: design process (with how prints are chosen), fabric selection, construction, finishing, quality standards | `/our-story` |
-| 5 | Our Philosophy | `/our-philosophy` |
-| 9 | Consciously IrisandMe | `/consciously-irisandme` |
-| 10 | People & Purpose — Support for Children | `/people-and-purpose` |
+| 4 | Our Story — Who we are, then Consciously Iris&Me | `/our-story` |
+| | People & Purpose of Iris&Me — People at the Heart of Our Story, Little Lives, Brighter Futures | `/people-and-purpose` |
 | 12 | Size & Fit | `/size-and-fit` |
 | 13 | Garment Care | `/garment-care` |
 | 14 | Shipping & Delivery | `/shipping-and-delivery` |
@@ -87,7 +85,26 @@ The client's first review cut the brand world back:
 - The **"Continue exploring"** pager is gone from all four Our Story pages; the
   Our Story menu already lists them.
 
-Everything removed is in the git history (commit `8888faf` and earlier) if any
+### Third review
+
+The client sent new copy for the OUR STORY tab and asked for everything else
+in it to come out, to keep it simple:
+
+- The **OUR STORY** menu has two headings: **Who we are** (`/our-story`) and
+  **People & Purpose of Iris&Me** (`/people-and-purpose`).
+- **Our Story** is "Who we are", then **Consciously Iris&Me** on the same
+  page, both in the client's words. Craftsmanship and the "Made to last" band
+  are gone.
+- **People & Purpose of Iris&Me** is the client's introduction, then **People
+  at the Heart of Our Story** and **Little Lives, Brighter Futures**. Support
+  for Children is replaced.
+- **Our Philosophy** and the separate **Consciously IrisandMe** page are gone.
+  Their old addresses, and those of Craftsmanship, Our Fabrics and Our Prints,
+  redirect to Our Story (`next.config.ts`).
+- Links elsewhere that pointed at the removed sections (homepage, product
+  pages, Garment Care, the FAQ) now point at Our Story or are dropped.
+
+Everything removed is in the git history (commit `4d1e3d3` and earlier) if any
 of it comes back.
 
 ## Where content lives
@@ -124,15 +141,8 @@ launch:
 - Payment methods, including Afterpay.
 - Size chart values and model measurements.
 - Instagram and Facebook handles (`@irisandme`) and the domain.
-- Brand story specifics (founding, people, workshops) — the copy describes the
-  brand's approach without inventing facts, so real details can be added. The
-  making process on Our Story (design process and how prints are chosen,
-  fabric selection, construction, finishing, the quality checks) is written as
-  the house's practice and should be checked against how IrisandMe actually
-  works.
-- Consciously IrisandMe and People & Purpose state intentions, never
-  achievements; confirm each one is something the business is willing to say
-  publicly.
+- Our Story and People & Purpose use the client's own copy, with one spelling
+  fix ("encouraging").
 - Care guidance against the real care labels, and the fabric compositions of
   each product.
 - The press boilerplate and the press office offer (imagery, samples,

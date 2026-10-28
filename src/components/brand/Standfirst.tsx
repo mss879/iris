@@ -11,22 +11,6 @@ export type StandfirstImage = {
 };
 
 /**
- * A titled break inside a Standfirst's copy, set in the serif on a hairline.
- * The id lets other pages link straight to it — /our-story#fabric-selection.
- * Utilities sit above `.prose-iris` in the cascade, so these classes win.
- */
-export function Subhead({ id, children }: { id: string; children: ReactNode }) {
-  return (
-    <h3
-      id={id}
-      className="mt-12 border-t hairline pt-8 font-display text-[clamp(1.5rem,2.4vw,1.9rem)] font-normal normal-case leading-[1.15] tracking-normal text-olive-800 first:mt-0"
-    >
-      {children}
-    </h3>
-  );
-}
-
-/**
  * A chapter of a brand page told in plain paragraphs: a heading, the argument
  * set large in the mixed-case serif, then the copy in one readable column.
  * The copy is set with `.prose-iris`, so paragraphs, h3s, lists and links

@@ -86,10 +86,10 @@ export default function BrandStatement() {
                 beyond a single season.
               </p>
               <Link
-                href="/our-philosophy"
+                href="/our-story"
                 className="group/ph mt-9 inline-flex items-center gap-4 text-olive-800"
               >
-                <span className="eyebrow link-underline text-[10px]">Discover our philosophy</span>
+                <span className="eyebrow link-underline text-[10px]">Discover our story</span>
                 <ArrowIcon className="h-3 w-4 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/ph:translate-x-1" />
               </Link>
             </div>

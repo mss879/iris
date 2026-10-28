@@ -80,7 +80,7 @@ export default function Values() {
 
           <Reveal delay={0.2}>
             <div className="mt-14 flex flex-wrap items-center gap-x-9 gap-y-5">
-              <ButtonLink href="/consciously-irisandme" variant="light">
+              <ButtonLink href="/our-story#consciously-irisandme" variant="light">
                 Consciously IrisandMe
               </ButtonLink>
               <TextLink href="/people-and-purpose" className="text-cream-50">
